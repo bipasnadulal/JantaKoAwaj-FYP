@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Landing from "./(public)/landing/page";
+
 
 export default function Home() {
   return (
     <>
-        {/* <h1 className="text-3xl font-bold underline">Hello World!</h1>
-    <h1 className="text-2xl font-extrabold bg-red-60">Hello World!</h1> */}
+      <Landing />
     </>
 
   );

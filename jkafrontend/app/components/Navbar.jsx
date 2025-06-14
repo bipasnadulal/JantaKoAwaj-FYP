@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function Navbar() {
   const [lang, setLang] = useState('en');
@@ -33,10 +34,7 @@ export default function Navbar() {
         </button>
         {/* Profile Icon */}
         <button className="text-white hover:text-blue-200">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
+          <AccountCircleIcon style={{ fontSize: 30 }} />
         </button>
         {/* Language Dropdown */}
         <div className="relative">
@@ -67,7 +65,7 @@ export default function Navbar() {
           )}
         </div>
         
-        {/* Hamburger Menu Button */}
+        {/* Hamburger Menu Button for small screen size */}
         <button
           className="md:hidden flex items-center text-white focus:outline-none ml-2"
           onClick={() => setMobileNavOpen(!mobileNavOpen)}
