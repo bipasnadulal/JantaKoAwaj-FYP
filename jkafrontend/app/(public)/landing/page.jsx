@@ -17,14 +17,12 @@ export default function Landing() {
             An interactive C2G2C platform to raise, vote, and track public concerns, peacefully and transparently.
           </p>
           <div className="space-x-4">
-            <a href="" className="bg-blue-600 text-white px-4 py-2 rounded">Submit Complaint</a>
-
-{/* <a href="/complaints" className="text-blue-600 px-4 py-2 rounded border-2 text-center hover:bg-blue-600 hover:text-white">View Complaints</a> */}
-            <a href="" className="text-blue-600 px-4 py-2 rounded border-2 text-center hover:bg-blue-600 hover:text-white">View Complaints</a>
+            <a href="" className="bg-blue-500 text-white px-4 py-2 rounded">Submit Complaint</a>
+            <a href="" className="text-blue-500 px-4 py-2 rounded border-2 text-center hover:bg-blue-500 hover:text-white">View Complaints</a>
           </div>
         </div>
         <div className="md:w-1/2 -top-6 md:mt-0">
-          <img src="/raiseVoice.png" alt="Raise your voice" className="w-full" />
+          <img src="/raiseVoice1.png" alt="Raise your voice" className="w-full" />
         </div>
       </section>
 

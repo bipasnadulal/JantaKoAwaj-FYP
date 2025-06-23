@@ -1,7 +1,9 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 export default function Navbar() {
   const [lang, setLang] = useState('en');
@@ -9,12 +11,19 @@ export default function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <nav className="bg-blue-500 shadow-md px-4 py-3 flex items-center justify-between">
+    <nav className="bg-blue-500 shadow-md px-4 py-5 flex items-center justify-between">
       {/* Left: Logo and Nav */}
       <div className="flex items-center space-x-8">
         {/* Logo */}
         <Link href="/">
-          <h1 className="font-bold text-xl md:text-2xl text-white cursor-pointer">Janta Ko Awaj</h1>
+        <Image
+         src="/jantakoawajLogo.png"
+          alt="Janta Ko Awaj Logo"
+          width={120}
+          height={120}
+          className="h-14 w-14 md:h-20 md:w-20"
+          />
+          {/* <h1 className="font-bold text-xl md:text-2xl text-white cursor-pointer">Janta Ko Awaj</h1> */}
         </Link>
         {/* Nav Links */}
         <div className="hidden md:flex space-x-6 text-white">
@@ -24,23 +33,21 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Right: Icons and Language */}
+      {/* Right: Icons and Language switching */}
       <div className="flex items-center space-x-4">
         {/* Notification Icon */}
-        <button className="relative text-white hover:text-blue-200">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
+        <button className="relative text-white hover:text-blue-200 cursor-pointer">
+          <NotificationsNoneIcon style={{ fontSize: 30 }} />
         </button>
         {/* Profile Icon */}
-        <button className="text-white hover:text-blue-200">
+        <button className="text-white hover:text-blue-200 cursor-pointer">
           <AccountCircleIcon style={{ fontSize: 30 }} />
         </button>
         {/* Language Dropdown */}
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center text-white px-2 py-1 rounded hover:bg-blue-600"
+            className="flex items-center text-white px-2 py-1 rounded hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
           >
             {lang === 'en' ? 'English' : 'नेपाली'}
             <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
