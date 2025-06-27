@@ -1,0 +1,228 @@
+'use client';
+import React, { useState } from 'react';
+import Link from 'next/link';
+
+export default function SubmitComplaintForm() {
+  const [form, setForm] = useState({
+    category: '',
+    title: '',
+    description: '',
+    province: '',
+    district: '',
+    ward: '',
+  });
+
+  const [showPreview, setShowPreview] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const categories = [
+    'Education',
+    'Environment',
+    'Municipal Guard',
+    'Agriculture and Livestocks',
+    'Public Infrastructure',
+  ];
+
+  const provinces = [
+    'Koshi Province',
+    'Madhesh Province',
+    'Bagmati Province',
+    'Gandaki Province',
+    'Lumbini Province',
+    'Karnali Province',
+    'Sudurpashchim Province',
+  ];
+
+  const districts = [
+    'Kathmandu', 'Lalitpur', 'Bhaktapur', 'Chitwan', 'Pokhara', 'Biratnagar',
+    'Dharan', 'Butwal', 'Hetauda', 'Nepalgunj', 'Dhangadhi', 'Other',
+  ];
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handlePreview = (e) => {
+    e.preventDefault();
+    // Basic required check
+    if (
+      form.category &&
+      form.title &&
+      form.description &&
+      form.province &&
+      form.district &&
+      form.ward
+    ) {
+      setShowPreview(true);
+    } else {
+      alert('Please fill out all fields before previewing.');
+    }
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    console.log('Complaint Submitted:', form);
+    // TODO: Integrate with backend
+  };
+
+  return (
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center px-6 lg:px-10">
+      <div className="max-w-3xl w-full">
+        <Link href="/" className="text-blue-600 hover:underline inline-flex items-center mb-6">
+          <span className="text-xl mr-2">←</span> Back to Home
+        </Link>
+
+        <h2 className="text-3xl font-bold text-blue-700 mb-8">Submit a Public Complaint</h2>
+
+        {!showPreview && !submitted && (
+          <form className="space-y-6 bg-white p-8 rounded-lg shadow-lg" onSubmit={handlePreview}>
+            {/* Category */}
+            <div>
+              <label className="block mb-1 font-medium">Complaint Category</label>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">-- Select Category --</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Title */}
+            <div>
+              <label className="block mb-1 font-medium">Title of the Problem</label>
+              <input
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                placeholder="e.g., Broken street light near school"
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label className="block mb-1 font-medium">Complaint Description</label>
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                rows="5"
+                placeholder="Explain the issue in detail..."
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            {/* Province */}
+            <div>
+              <label className="block mb-1 font-medium">Province</label>
+              <select
+                name="province"
+                value={form.province}
+                onChange={handleChange}
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">-- Select Province --</option>
+                {provinces.map((p) => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* District */}
+            <div>
+              <label className="block mb-1 font-medium">District</label>
+              <select
+                name="district"
+                value={form.district}
+                onChange={handleChange}
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">-- Select District --</option>
+                {districts.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Ward */}
+            <div>
+              <label className="block mb-1 font-medium">Ward Number</label>
+              <select
+                name="ward"
+                value={form.ward}
+                onChange={handleChange}
+                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">-- Select Ward No --</option>
+                {[...Array(35)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>Ward {i + 1}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Preview Button */}
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition"
+            >
+              Preview Complaint
+            </button>
+          </form>
+        )}
+
+        {/* Preview Section */}
+        {showPreview && !submitted && (
+          <div className="bg-white p-8 rounded-lg shadow-lg space-y-4">
+            <h3 className="text-xl font-bold text-blue-700 mb-4">Preview Your Complaint</h3>
+            <p><strong>Category:</strong> {form.category}</p>
+            <p><strong>Title:</strong> {form.title}</p>
+            <p><strong>Description:</strong> {form.description}</p>
+            <p><strong>Province:</strong> {form.province}</p>
+            <p><strong>District:</strong> {form.district}</p>
+            <p><strong>Ward No:</strong> {form.ward}</p>
+
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={handleSubmit}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              >
+                Confirm and Submit
+              </button>
+              <button
+                onClick={() => setShowPreview(false)}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition"
+              >
+                Go Back and Edit
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Success Message */}
+        {submitted && (
+          <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded-lg shadow-md mt-4">
+            <h3 className="text-2xl font-bold mb-2">Your complaint has been submitted successfully!</h3>
+            <p>
+    Our system will verify the complaint for genuineness. If it passes the review, it will be publicly posted and forwarded to the concerned authority.
+    <br />
+    You’ll be notified once the complaint is published. Thank you for raising your voice responsibly.
+  </p>
+
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

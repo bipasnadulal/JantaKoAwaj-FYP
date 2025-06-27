@@ -17,7 +17,7 @@ const complaintStats = {
 export default function ComplaintsSummary() {
   return (
     <section className="w-full px-6 py-16 bg-gradient-to-b from-white to-blue-50">
-      <div className="max-w-7xl mx-auto text-center">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-10 text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-10">
           Latest Status of Complaints from Janta Ko Aawaj
         </h2>
