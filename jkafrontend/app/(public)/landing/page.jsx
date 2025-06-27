@@ -9,26 +9,33 @@ export default function Landing() {
   return (
     <>
       {/* Landing Page / Hero Section */}
-      <section className="flex flex-col md:flex-row min-h-screen items-center px-6 py-12 bg-gray-50">
-        <div className="md:w-1/2 space-y-6">
+      <section className="flex flex-col md:flex-row min-h-screen items-center justify-center px-6 py-12 bg-gray-50">
+
+        <div className='max-w-7xl mx-auto px-6 md:px-12 lg:px-10 flex flex-col md:flex-row items-center justify-center w-full'>
+
+        <div className="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
           <h1 className="text-6xl font-bold text-gray-800">Janta ko Aawaj</h1>
           <p className='text-2xl text-gray-800 italic'>Where Every Voice Matters.</p>
           <p className=" text-3xl text-gray-600">
             An interactive C2G2C platform to raise, vote, and track public concerns, peacefully and transparently.
           </p>
           <div className="space-x-4">
-            <a href="" className="bg-blue-500 text-white px-4 py-2 rounded">Submit Complaint</a>
+            <a href="/submitComplaintForm" className="bg-blue-500 text-white px-4 py-2 rounded">Submit Complaint</a>
             <a href="" className="text-blue-500 px-4 py-2 rounded border-2 text-center hover:bg-blue-500 hover:text-white">View Complaints</a>
           </div>
         </div>
         <div className="md:w-1/2 -top-6 md:mt-0">
           <img src="/raiseVoice1.png" alt="Raise your voice" className="w-full" />
         </div>
+        </div>
       </section>
 
       {/* Key Features Section following the landing page */}
       <section className="w-full bg-white py-16 px-6">
-        <div className="max-w-6xl mx-auto">
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-10">
+
+<div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Key Features</h2>
 
           {/* First row: 3 features */}
@@ -81,6 +88,11 @@ export default function Landing() {
           </div>
             
         </div>
+
+
+        </div>
+
+        
       </section>
     </>
   );

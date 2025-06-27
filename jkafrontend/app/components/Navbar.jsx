@@ -9,10 +9,12 @@ export default function Navbar() {
   const [lang, setLang] = useState('en');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [profileDropdown, setProfileDropdown] =useState(false);
 
   return (
-    <nav className="bg-blue-500 shadow-md px-4 py-5 flex items-center justify-between">
-      {/* Left: Logo and Nav */}
+    <nav className="bg-blue-500 shadow-md py-5 fixed top-0 left-0 w-full z-50 ">
+      <div className='max-w-7xl mx-auto px-6 md:px-12 lg:px-10 flex items-center justify-between'>
+{/* Left: Logo and Nav */}
       <div className="flex items-center space-x-8">
         {/* Logo */}
         <Link href="/">
@@ -28,25 +30,46 @@ export default function Navbar() {
         {/* Nav Links */}
         <div className="hidden md:flex space-x-6 text-white">
           <Link href="/">Home</Link>
-          <Link href="/about">About Us</Link>
+           <a href="#about">About Us</a>
           <Link href="/complaints">Complaints</Link>
         </div>
       </div>
 
       {/* Right: Icons and Language switching */}
       <div className="flex items-center space-x-4">
+        
         {/* Notification Icon */}
         <button className="relative text-white hover:text-blue-200 cursor-pointer">
           <NotificationsNoneIcon style={{ fontSize: 30 }} />
         </button>
-        {/* Profile Icon */}
-        <button className="text-white hover:text-blue-200 cursor-pointer">
-          <AccountCircleIcon style={{ fontSize: 30 }} />
-        </button>
+
+        {/* Profile Icon with Dropdown*/}
+        <div className="relative">
+          <button className='text-white hover:text-blue-200 cursor-pointer'
+          onClick={()=> {
+setProfileDropdown((prev) => !prev);
+setDropdownOpen(false);
+}}
+          >
+<AccountCircleIcon style={{ fontSize: 30 }} />
+          </button>
+        
+        {profileDropdown && (
+          <div className='absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-20'>
+            <Link 
+            href="/login"
+            className='block w-full text-left px-4 py-2 text-sm hover:bg-blue-100 text-blue-700'
+            onClick={()=>setProfileDropdown(false)}
+            >Login</Link>
+          </div>
+        )}
+</div>
         {/* Language Dropdown */}
         <div className="relative">
           <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
+            onClick={() => {setDropdownOpen(!dropdownOpen);
+              setProfileDropdown(false);
+            }}
             className="flex items-center text-white px-2 py-1 rounded hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
           >
             {lang === 'en' ? 'English' : 'नेपाली'}
@@ -110,6 +133,8 @@ export default function Navbar() {
           </Link>
         </div>
       )}
+      </div>
+      
     </nav>
   );
 }

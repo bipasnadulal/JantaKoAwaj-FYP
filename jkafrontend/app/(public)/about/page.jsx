@@ -34,8 +34,9 @@ const categories = [
 
 export default function AboutPage(){
     return(
-         <section className="w-full px-6 py-16 bg-gradient-to-b from-white to-blue-50">
-            <div className="max-w-4xl mx-auto text-center">
+      <main className="scroll-smooth">
+         <section id="about" className="scroll-mt-24 w-full px-6 py-16 bg-gradient-to-b from-white to-blue-50 ">
+            <div className=" max-w-7xl mx-auto px-6 md:px-12 lg:px-10 text-center">
         <h1 className="text-4xl font-bold text-gray-800 mb-6">About Us</h1>
 
         <p className="text-lg text-gray-700 leading-relaxed mb-8">
@@ -67,10 +68,10 @@ export default function AboutPage(){
         </p>
       </div>
             {/* Complaint Areas */}
-        <h3 className="text-2xl font-semibold text-gray-800 mb-6 mt-16 text-center">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-6 mt-16 text-center ">
           Sectors Where Complaints Are Addressed
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto px-6 md:px-12 lg:px-10 ">
           {categories.map((cat, idx) => (
             <div
               key={cat.name}
@@ -83,5 +84,6 @@ export default function AboutPage(){
           ))}
         </div>
          </section>
+         </main>
     )
 }
