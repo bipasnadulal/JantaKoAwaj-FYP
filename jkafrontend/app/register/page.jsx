@@ -5,16 +5,22 @@ import infoNepal from 'info-nepal';
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
-    username: '', phone: '', password: '',
-    confirmPassword: '', province: '',
-    district: '', municipality: '', ward: ''
+    username: '', 
+    phone: '', 
+    password: '',
+    confirmPassword: '', 
+    province: '',
+    district: '', 
+    municipality: '', 
+    ward: ''
   });
   const [errors, setErrors] = useState({});
   const [districts, setDistricts] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
 
-  const provinces = Object.keys(infoNepal.districtsOfProvince);
+  const provinces = Object.keys(infoNepal.districtsOfProvince); // Load respective districts of provinces.
 
+  //based on the selected province districts are updated/displayed on the dropdown
   useEffect(() => {
     if (form.province) {
       const dlist = infoNepal.districtsOfProvince[form.province] || [];
@@ -24,9 +30,10 @@ export default function RegisterPage() {
     }
   }, [form.province]);
 
+  //based on the districts selected, municipalities are displayed or updated
   useEffect(() => {
     if (form.district) {
-      const mlist = infoNepal.localBodies[form.district] || [];
+      const mlist = infoNepal.localBodies[form.district] || []; // Load localBodies i.e. municipalities & rural municipalities of respective districts.
       setMunicipalities(mlist);
       setForm(f => ({ ...f, municipality: '' }));
     }
@@ -69,7 +76,7 @@ export default function RegisterPage() {
           Register
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Username, Phone, Password, Confirm Password */}
+          
           {['username','phone','password','confirmPassword'].map((field) => (
             <div key={field}>
               <label className="capitalize">{field.replace(/([A-Z])/g,' $1')}</label>
@@ -157,7 +164,7 @@ export default function RegisterPage() {
             {errors.ward && <p className="text-red-500">{errors.ward}</p>}
           </div>
 
-          {/* Submit */}
+          
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
