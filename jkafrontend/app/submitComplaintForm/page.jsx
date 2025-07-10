@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import infoNepal from 'info-nepal';
 
 export default function SubmitComplaintForm() {
   const [form, setForm] = useState({
@@ -9,11 +10,15 @@ export default function SubmitComplaintForm() {
     description: '',
     province: '',
     district: '',
+    municipality: '',
     ward: '',
   });
 
   const [showPreview, setShowPreview] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const [districts, setDistricts] = useState([]);
+  const [municipalities, setMunicipalities] = useState([]);
 
   const categories = [
     'Education',
@@ -23,20 +28,26 @@ export default function SubmitComplaintForm() {
     'Public Infrastructure',
   ];
 
-  const provinces = [
-    'Koshi Province',
-    'Madhesh Province',
-    'Bagmati Province',
-    'Gandaki Province',
-    'Lumbini Province',
-    'Karnali Province',
-    'Sudurpashchim Province',
-  ];
+  const provinces = Object.keys(infoNepal.districtsOfProvince);
 
-  const districts = [
-    'Kathmandu', 'Lalitpur', 'Bhaktapur', 'Chitwan', 'Pokhara', 'Biratnagar',
-    'Dharan', 'Butwal', 'Hetauda', 'Nepalgunj', 'Dhangadhi', 'Other',
-  ];
+ //based on the selected province districts are updated/displayed on the dropdown
+  useEffect(() => {
+    if (form.province) {
+      const dists = infoNepal.districtsOfProvince[form.province] || [];
+      setDistricts(dists);
+      setForm((prev) => ({ ...prev, district: '', municipality: '' }));
+      setMunicipalities([]);
+    }
+  }, [form.province]);
+
+  //based on the districts selected, municipalities are displayed or updated
+  useEffect(() => {
+    if (form.district) {
+      const munis = infoNepal.localBodies[form.district] || [];
+      setMunicipalities(munis);
+      setForm((prev) => ({ ...prev, municipality: '' }));
+    }
+  }, [form.district]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,13 +55,13 @@ export default function SubmitComplaintForm() {
 
   const handlePreview = (e) => {
     e.preventDefault();
-    // Basic required check
     if (
       form.category &&
       form.title &&
       form.description &&
       form.province &&
       form.district &&
+      form.municipality &&
       form.ward
     ) {
       setShowPreview(true);
@@ -62,7 +73,7 @@ export default function SubmitComplaintForm() {
   const handleSubmit = () => {
     setSubmitted(true);
     console.log('Complaint Submitted:', form);
-    // TODO: Integrate with backend
+    // Send to backend
   };
 
   return (
@@ -74,17 +85,17 @@ export default function SubmitComplaintForm() {
 
         <h2 className="text-3xl font-bold text-blue-700 mb-8">Submit a Public Complaint</h2>
 
+        {/* FORM */}
         {!showPreview && !submitted && (
           <form className="space-y-6 bg-white p-8 rounded-lg shadow-lg" onSubmit={handlePreview}>
-            {/* Category */}
+            
             <div>
               <label className="block mb-1 font-medium">Complaint Category</label>
               <select
                 name="category"
                 value={form.category}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-                required
+                className="w-full border px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">-- Select Category --</option>
                 {categories.map((cat) => (
@@ -97,13 +108,11 @@ export default function SubmitComplaintForm() {
             <div>
               <label className="block mb-1 font-medium">Title of the Problem</label>
               <input
-                type="text"
                 name="title"
                 value={form.title}
                 onChange={handleChange}
+                className="w-full border px-4 py-2 rounded"
                 placeholder="e.g., Broken street light near school"
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-                required
               />
             </div>
 
@@ -115,9 +124,8 @@ export default function SubmitComplaintForm() {
                 value={form.description}
                 onChange={handleChange}
                 rows="5"
+                className="w-full border px-4 py-2 rounded"
                 placeholder="Explain the issue in detail..."
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-                required
               />
             </div>
 
@@ -128,8 +136,7 @@ export default function SubmitComplaintForm() {
                 name="province"
                 value={form.province}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-                required
+                className="w-full border px-4 py-2 rounded"
               >
                 <option value="">-- Select Province --</option>
                 {provinces.map((p) => (
@@ -145,12 +152,29 @@ export default function SubmitComplaintForm() {
                 name="district"
                 value={form.district}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-                required
+                disabled={!districts.length}
+                className="w-full border px-4 py-2 rounded"
               >
                 <option value="">-- Select District --</option>
                 {districts.map((d) => (
                   <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Municipality */}
+            <div>
+              <label className="block mb-1 font-medium">Municipality</label>
+              <select
+                name="municipality"
+                value={form.municipality}
+                onChange={handleChange}
+                disabled={!municipalities.length}
+                className="w-full border px-4 py-2 rounded"
+              >
+                <option value="">-- Select Municipality --</option>
+                {municipalities.map((m) => (
+                  <option key={m} value={m}>{m}</option>
                 ))}
               </select>
             </div>
@@ -162,8 +186,7 @@ export default function SubmitComplaintForm() {
                 name="ward"
                 value={form.ward}
                 onChange={handleChange}
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:ring-2 focus:ring-blue-500"
-                required
+                className="w-full border px-4 py-2 rounded"
               >
                 <option value="">-- Select Ward No --</option>
                 {[...Array(35)].map((_, i) => (
@@ -172,7 +195,7 @@ export default function SubmitComplaintForm() {
               </select>
             </div>
 
-            {/* Preview Button */}
+            {/* Preview */}
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition"
@@ -191,6 +214,7 @@ export default function SubmitComplaintForm() {
             <p><strong>Description:</strong> {form.description}</p>
             <p><strong>Province:</strong> {form.province}</p>
             <p><strong>District:</strong> {form.district}</p>
+            <p><strong>Municipality:</strong> {form.municipality}</p>
             <p><strong>Ward No:</strong> {form.ward}</p>
 
             <div className="flex gap-4 mt-6">
@@ -215,11 +239,10 @@ export default function SubmitComplaintForm() {
           <div className="bg-green-100 border border-green-300 text-green-800 p-6 rounded-lg shadow-md mt-4">
             <h3 className="text-2xl font-bold mb-2">Your complaint has been submitted successfully!</h3>
             <p>
-    Our system will verify the complaint for genuineness. If it passes the review, it will be publicly posted and forwarded to the concerned authority.
-    <br />
-    You’ll be notified once the complaint is published. Thank you for raising your voice responsibly.
-  </p>
-
+              Our system will verify the complaint for genuineness.
+              Once approved, it will be published and forwarded to the concerned authority.
+              Thank you for raising your voice responsibly.
+            </p>
           </div>
         )}
       </div>

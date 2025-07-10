@@ -89,7 +89,7 @@ export default function UserDashboard() {
 
   const renderProfile = () => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-500 to-purple-400 text-white px-6 py-6 relative">
+      <div className="bg-blue-500 text-white px-6 py-6 relative">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-white text-blue-600 rounded-full flex items-center justify-center text-3xl font-bold">
             <Person fontSize="large" />
