@@ -8,7 +8,9 @@ export default function RootLayout({ children }) {
     const hideNavBar = pathName.startsWith('/login') ||
      pathName.startsWith('/signup') ||
      pathName.startsWith('/register') ||
-     pathName.startsWith('/submitComplaintForm');
+     pathName.startsWith('/submitComplaintForm') ||
+     pathName.startsWith('/dashboard')
+     ;
   return (
     <html lang="en">
       <body>

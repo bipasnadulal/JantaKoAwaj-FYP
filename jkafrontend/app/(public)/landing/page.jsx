@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import PollIcon from '@mui/icons-material/Poll';
@@ -6,6 +7,14 @@ import VibrationIcon from '@mui/icons-material/Vibration';
 import TimelineIcon from '@mui/icons-material/Timeline';
 
 export default function Landing() {
+  const isLoggedIn = false;
+  const handleNewComplaint = () => {
+    if (!isLoggedIn) {
+      alert('Oops! You are not logged in. Please log in to submit a complaint.');
+      return;
+    }
+    window.location.href = '/submitComplaintForm'; 
+  };
   return (
     <>
       {/* Landing Page / Hero Section */}
@@ -20,8 +29,8 @@ export default function Landing() {
             An interactive C2G2C platform to raise, vote, and track public concerns, peacefully and transparently.
           </p>
           <div className="space-x-4">
-            <a href="/submitComplaintForm" className="bg-blue-500 text-white px-4 py-2 rounded">Submit Complaint</a>
-            <a href="" className="text-blue-500 px-4 py-2 rounded border-2 text-center hover:bg-blue-500 hover:text-white">View Complaints</a>
+            <button className='bg-blue-500 text-white px-4 py-2 rounded cursor-pointer' onClick={handleNewComplaint}>Submit Complaint</button>
+            <a href="/complaintsPage" className="text-blue-500 px-4 py-2 rounded border-2 text-center hover:bg-blue-500 hover:text-white">View Complaints</a>
           </div>
         </div>
         <div className="md:w-1/2 -top-6 md:mt-0">
