@@ -31,7 +31,7 @@ export default function Navbar() {
         <div className="hidden md:flex space-x-6 text-white">
           <Link href="/">Home</Link>
            <a href="#about">About Us</a>
-          <Link href="/complaints">Complaints</Link>
+          <Link href="/complaintsPage">Complaints</Link>
         </div>
       </div>
 
