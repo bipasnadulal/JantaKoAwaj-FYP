@@ -1,17 +1,47 @@
-// app/dashboard/admin/page.jsx
 'use client';
-import React from 'react';
-import AdminNavbar from './components/adminNavbar';
+import React, { useState } from 'react';
+import AdminSidebar from './adminComponents/AdminSidebar';
+import AdminOverviewCards from './adminComponents/AdminOverviewCards';
+import AdminComplaintsTable from './adminComponents/AdminComplaintsTable';
+import AssignedAuthorities from './adminComponents/AssignedAuthorities';
+// import ComplaintProgress from './adminComponents/ComplaintProgress';
 
-export default function AdminDashboardPage() {
+export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState('overview');
+
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-800 px-4 lg:px-10 py-8">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      <p className="text-lg mb-4">Welcome back, Admin. Here's the latest on community issues.</p>
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <AdminNavbar/>
+      {/* Main Content */}
+      <div className="flex-1 p-6 lg:px-10">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-blue-600 capitalize">
+            {activeTab === 'overview' && 'Admin Dashboard'}
+            {activeTab === 'genuine' && 'Genuine Complaints'}
+            {activeTab === 'assigned' && 'Assigned Authorities'}
+            {activeTab === 'progress' && 'Follow-up & Progress'}
+          </h1>
+        </div>
 
-      {/* Main dashboard content goes here: complaints list, stats, etc. */}
-    </main>
+        {/* Tab Content */}
+        {activeTab === 'overview' && (
+          <>
+            <div className="bg-blue-500 text-white p-6 rounded-xl shadow mb-6">
+              <h2 className="text-xl font-semibold">Welcome Admin</h2>
+              <p className="text-sm text-blue-100">Monitor complaint flow and authority responses.</p>
+            </div>
+            <AdminOverviewCards />
+          </>
+        )}
+
+        {activeTab === 'complaints' && <AdminComplaintsTable />}
+
+        {activeTab === 'assigned' && <AssignedAuthorities />}
+
+        {/* {activeTab === 'progress' && <ComplaintProgress />} */}
+      </div>
+    </div>
   );
 }
