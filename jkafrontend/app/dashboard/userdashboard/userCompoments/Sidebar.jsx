@@ -50,7 +50,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </nav>
       </div>
 
-      <button className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600">
+      <button className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 cursor-pointer">
         <Logout fontSize="small" /> Logout
       </button>
     </aside>
