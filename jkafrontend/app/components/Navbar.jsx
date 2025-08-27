@@ -56,11 +56,19 @@ setDropdownOpen(false);
         
         {profileDropdown && (
           <div className='absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-20'>
+          {/* user login */}
             <Link 
             href="/login"
             className='block w-full text-left px-4 py-2 text-sm hover:bg-blue-100 text-blue-700'
             onClick={()=>setProfileDropdown(false)}
             >Login</Link>
+
+            {/* authority login */}
+            <Link 
+            href="/authoritylogin"
+            className='block w-full text-left px-4 py-2 text-sm hover:bg-blue-100 text-blue-700'
+            onClick={()=>setProfileDropdown(false)}
+            >Authority Login</Link>
           </div>
         )}
 </div>

@@ -1,5 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import infoNepal from 'info-nepal';
 
@@ -17,6 +18,7 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [districts, setDistricts] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
+  const router = useRouter();
 
   const provinces = Object.keys(infoNepal.districtsOfProvince); // Load respective districts of provinces.
 
@@ -59,15 +61,43 @@ export default function RegisterPage() {
     return err;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const errs = validate();
-    setErrors(errs);
-    if (!Object.keys(errs).length) {
-      console.log('Form submitted:', form);
-      // send data to backend here
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const errs = validate();
+  setErrors(errs);
+
+  if (!Object.keys(errs).length) {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/users/register/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: form.username,
+          phone: form.phone,
+          password: form.password,
+          confirmPassword: form.confirmPassword,
+          province: form.province,
+          district: form.district,
+          municipality: form.municipality,
+          ward: form.ward,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || "Registration successful! Please login.");
+        router.push("/login");
+        
+      } else {
+        console.error("Backend errors:", data);
+        setErrors(data);
+      }
+    } catch (err) {
+      console.error("Network error:", err);
     }
-  };
+  }
+};
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-50 px-6">
