@@ -1,64 +1,48 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ComplaintCard from '@/app/components/ComplaintCards';
 
-
-
-const initialComplaints = [
-  {
-    id: 1,
-    title: 'Street lights not working',
-    description: 'Street lights not working near the hospital.',
-    category: 'Public Infrastructure',
-    status: 'in-progress',
-    createdAt: '2025-06-30T10:30:00Z',
-    location: 'Kathmandu, Ward 7, Bagmati',
-    agreeVotes: 24,
-    disagreeVotes: 6,
-    userVote: null,
-    progressLogs: [
-      {
-        date: '2025-07-01',
-        action: 'Complaint reviewed by admin',
-        description: 'Initial review done. Found to be valid and assigned to Kathmandu Infrastructure Office.',
-        file: null
-      },
-      {
-        date: '2025-07-03',
-        action: 'Field inspection done',
-        description: 'Site visit completed by municipal engineers. Issue verified.',
-        file: '/uploads/site_inspection.pdf'
-      },
-      {
-        date: '2025-07-06',
-        action: 'Repair initiated',
-        description: 'Work started for replacing faulty streetlights.',
-        file: '/uploads/work_plan.jpg'
-      }
-    ]
-  },
-  {
-    id: 2,
-    title: 'Garbage not collected',
-    description: 'Garbage not collected for a week in our neighborhood.',
-    category: 'Environment',
-    status: 'pending',
-    createdAt: '2025-06-28T09:00:00Z',
-    location: 'Butwal, Ward 3, Lumbini',
-    agreeVotes: 18,
-    disagreeVotes: 2,
-    userVote: null,
-    progressLogs : []
-  },
-];
-
 export default function ComplaintsPage() {
-  const [complaints, setComplaints] = useState(initialComplaints);
+  const [complaints, setComplaints] = useState([]);
   const [filters, setFilters] = useState({ category: '', status: '', sort: '' });
-  const isLoggedIn = false; // Replace with your actual login check
-  // const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  const handleVote = async (complaintId, voteType) => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+
+
+    const fetchComplaints = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/complaints/list/', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Token ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch complaints');
+        }
+
+        const data = await res.json();
+        // filter to show only genuine complaints
+        const genuineComplaints = data.filter((c) => c.status === 'genuine');
+        setComplaints(genuineComplaints);
+      } catch (err) {
+        console.error('Error fetching complaints:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchComplaints();
+  }, []);
+
+  const handleVote = (complaintId, voteType) => {
     setComplaints((prev) =>
       prev.map((complaint) => {
         if (complaint.id !== complaintId) return complaint;
@@ -74,21 +58,22 @@ export default function ComplaintsPage() {
   };
 
   const handleNewComplaint = () => {
-    if (!isLoggedIn) {
-      alert('Oops! You are not logged in. Please log in to submit a complaint.');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login?redirect=/submitComplaintForm');
       return;
     }
-    window.location.href = '/submitComplaintForm'; 
+    router.push('/submitComplaintForm');
   };
 
   const filteredComplaints = complaints
     .filter((c) => (!filters.category || c.category === filters.category) &&
-                   (!filters.status || c.status === filters.status))
+      (!filters.status || c.status === filters.status))
     .sort((a, b) => (filters.sort === 'mostVoted' ? b.agreeVotes - a.agreeVotes : 0));
 
   return (
     <section className="min-h-screen bg-blue-50 py-10 px-4 lg:px-36 mt-32">
-      {/* Title and Add Button */}
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h1 className="text-3xl font-bold text-black-700 text-center md:text-left">
           Voice Your Concerns, Drive Change
@@ -122,7 +107,7 @@ export default function ComplaintsPage() {
           className="px-4 py-2 rounded border border-gray-300"
         >
           <option value="">All Status</option>
-          <option value="pending">Pending</option>
+          <option value="under review">Under Review</option>
           <option value="in-progress">In Progress</option>
           <option value="resolved">Resolved</option>
         </select>
@@ -139,12 +124,14 @@ export default function ComplaintsPage() {
 
       {/* Complaint Display */}
       <div className="space-y-8">
-        {filteredComplaints.length > 0 ? (
+        {loading ? (
+          <p className="text-center text-gray-600">Loading complaints...</p>
+        ) : filteredComplaints.length > 0 ? (
           filteredComplaints.map((complaint) => (
             <ComplaintCard key={complaint.id} complaint={complaint} onVote={handleVote} />
           ))
         ) : (
-          <p className="text-center text-gray-600">No complaints match your filters.</p>
+          <p className="text-center text-gray-600">No complaints found.</p>
         )}
       </div>
     </section>

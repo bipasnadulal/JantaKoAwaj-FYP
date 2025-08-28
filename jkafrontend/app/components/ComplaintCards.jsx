@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -5,13 +6,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-// import PersonIcon from '@mui/icons-material/Person';
 import TagIcon from '@mui/icons-material/LocalOffer';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
+import { useRouter } from 'next/navigation';
 
 export default function ComplaintCard({ complaint, onVote }) {
+  const router = useRouter();
   const [isVoting, setIsVoting] = useState(false);
   const [currentVote, setCurrentVote] = useState(complaint.userVote);
   const [showProgress, setShowProgress] = useState(false);
@@ -19,13 +21,18 @@ export default function ComplaintCard({ complaint, onVote }) {
   const totalVotes = complaint.agreeVotes + complaint.disagreeVotes;
   const agreePercentage = totalVotes > 0 ? (complaint.agreeVotes / totalVotes) * 100 : 0;
 
-
-
   const handleVote = async (voteType) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Redirect to login with query param to come back here
+      router.push(`/login?redirect=/complaintsPage`);
+      return;
+    }
+
     if (isVoting) return;
     setIsVoting(true);
     try {
-      await onVote(complaint.id, voteType); // Backend call
+      await onVote(complaint.id, voteType);
       setCurrentVote(currentVote === voteType ? null : voteType);
     } catch (error) {
       console.error('Error voting:', error);
@@ -65,9 +72,6 @@ export default function ComplaintCard({ complaint, onVote }) {
     return colors[category] || 'bg-gray-100 text-gray-800';
   };
 
-  const progressSteps = ['pending', 'in-review', 'in-progress', 'resolved'];
-  const currentStepIndex = progressSteps.indexOf(complaint.status);
-
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden">
       <div className="p-6 pb-4">
@@ -82,7 +86,7 @@ export default function ComplaintCard({ complaint, onVote }) {
               {complaint.category}
             </span>
           </div>
-          <div className="text-xs text-gray-500">{new Date(complaint.createdAt).toLocaleDateString()}</div>
+          <div className="text-xs text-gray-500">{new Date(complaint.created_at).toLocaleDateString()}</div>
         </div>
 
         <h3 className="text-lg font-semibold text-gray-900 mb-2">{complaint.title}</h3>
@@ -93,10 +97,6 @@ export default function ComplaintCard({ complaint, onVote }) {
             <LocationOnIcon fontSize="small" />
             <span>{complaint.location}</span>
           </div>
-          {/* <div className="flex items-center gap-1">
-            <PersonIcon fontSize="small" />
-            <span>by {complaint.author}</span>
-          </div> */}
         </div>
       </div>
 
@@ -119,14 +119,13 @@ export default function ComplaintCard({ complaint, onVote }) {
           </div>
         </div>
 
-
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <button
             onClick={() => handleVote('agree')}
             disabled={isVoting}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium text-sm cursor-pointer transition ${currentVote === 'agree'
-                ? 'bg-green-500 text-white shadow-md'
-                : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
+              ? 'bg-green-500 text-white shadow-md'
+              : 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
               } ${isVoting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-sm'}`}
           >
             <ThumbUpIcon fontSize="small" />
@@ -137,8 +136,8 @@ export default function ComplaintCard({ complaint, onVote }) {
             onClick={() => handleVote('disagree')}
             disabled={isVoting}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-medium text-sm cursor-pointer transition ${currentVote === 'disagree'
-                ? 'bg-red-500 text-white shadow-md'
-                : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
+              ? 'bg-red-500 text-white shadow-md'
+              : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
               } ${isVoting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-sm'}`}
           >
             <ThumbDownIcon fontSize="small" />
@@ -153,39 +152,6 @@ export default function ComplaintCard({ complaint, onVote }) {
             {showProgress ? 'Hide Status' : 'View Status'}
           </button>
         </div>
-
-        {/* Detailed Status Progress */}
-        {showProgress && (
-          <div className="mt-4 space-y-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <h4 className="text-lg font-semibold text-gray-800 mb-2">Detailed Complaint Progress</h4>
-            {complaint.progressLogs?.length ? (
-              complaint.progressLogs.map((log, idx) => (
-                <div key={idx} className="bg-white shadow-sm rounded p-3 border border-gray-100">
-                  <div className="flex justify-between items-center text-sm text-gray-500 mb-1">
-                    <span className="font-semibold text-gray-700">{log.action}</span>
-                    <span>{new Date(log.date).toLocaleDateString()}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">{log.description}</p>
-                  {log.file && (
-                    <div>
-                      <a
-                        href={log.file}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 text-sm underline"
-                      >
-                        📎 View Attached Report
-                      </a>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-gray-500 italic">No detailed updates available yet.</p>
-            )}
-          </div>
-        )}
-
       </div>
     </div>
   );

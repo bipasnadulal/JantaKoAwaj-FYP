@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
@@ -10,6 +11,21 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [profileDropdown, setProfileDropdown] =useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const router = useRouter();
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    setIsLoggedIn(false);
+    setProfileDropdown(false);
+    router.push('/');
+  };
 
   return (
     <nav className="bg-blue-500 shadow-md py-5 fixed top-0 left-0 w-full z-50 ">
@@ -30,7 +46,7 @@ export default function Navbar() {
         {/* Nav Links */}
         <div className="hidden md:flex space-x-6 text-white">
           <Link href="/">Home</Link>
-           <a href="#about">About Us</a>
+           <a href="/about">About Us</a>
           <Link href="/complaintsPage">Complaints</Link>
         </div>
       </div>
@@ -55,22 +71,24 @@ setDropdownOpen(false);
           </button>
         
         {profileDropdown && (
-          <div className='absolute right-0 mt-2 w-32 bg-white rounded shadow-lg z-20'>
-          {/* user login */}
-            <Link 
-            href="/login"
-            className='block w-full text-left px-4 py-2 text-sm hover:bg-blue-100 text-blue-700'
-            onClick={()=>setProfileDropdown(false)}
-            >Login</Link>
+  <div className='absolute right-0 mt-2 w-40 bg-white rounded shadow-lg z-20'>
+    {!isLoggedIn ? (
+      <>
+        <Link href="/login" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Login</Link>
+        <Link href="/authoritylogin" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Authority Login</Link>
+      </>
+    ) : (
+      <>
+        <Link href="/dashboard/userdashboard" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Dashboard</Link>
+        <Link href="/profile" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Profile</Link>
+        <button onClick={handleLogout} className='w-full text-left px-4 py-2 hover:bg-blue-100 text-blue-700'>Logout</button>
+      </>
+    )}
+  </div>
+)}
 
-            {/* authority login */}
-            <Link 
-            href="/authoritylogin"
-            className='block w-full text-left px-4 py-2 text-sm hover:bg-blue-100 text-blue-700'
-            onClick={()=>setProfileDropdown(false)}
-            >Authority Login</Link>
-          </div>
-        )}
+
+        
 </div>
         {/* Language Dropdown */}
         <div className="relative">
