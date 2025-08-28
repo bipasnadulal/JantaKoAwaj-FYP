@@ -40,10 +40,12 @@ INSTALLED_APPS = [
 
     #my apps
     'rest_framework',
+    'rest_framework.authtoken',
     "corsheaders",
     'users',
     'complaints',
     'authorities',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -138,4 +140,16 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.PhoneBackend',
     'django.contrib.auth.backends.ModelBackend',  
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',  # for DRF Token
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # if using JWT
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',  # optional, can also set per view
+    )
+}
+
+
 
