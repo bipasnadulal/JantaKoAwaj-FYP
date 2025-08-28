@@ -44,7 +44,7 @@ export default function AuthorityLoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Authority Login</h2>
-        
+
         {error && (
           <p className="text-red-500 text-center mb-4">{error}</p>
         )}

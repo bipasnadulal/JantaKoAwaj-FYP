@@ -1,7 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import infoNepal from 'info-nepal';
+import { containerClasses } from '@mui/material';
 
 export default function SubmitComplaintForm() {
   const [form, setForm] = useState({
@@ -14,9 +16,12 @@ export default function SubmitComplaintForm() {
     ward: '',
   });
 
+  const router = useRouter();
+
   const [showPreview, setShowPreview] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [districts, setDistricts] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
 
@@ -30,7 +35,7 @@ export default function SubmitComplaintForm() {
 
   const provinces = Object.keys(infoNepal.districtsOfProvince);
 
- //based on the selected province districts are updated/displayed on the dropdown
+  //based on the selected province districts are updated/displayed on the dropdown
   useEffect(() => {
     if (form.province) {
       const dists = infoNepal.districtsOfProvince[form.province] || [];
@@ -70,11 +75,54 @@ export default function SubmitComplaintForm() {
     }
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    console.log('Complaint Submitted:', form);
-    // Send to backend
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError('');
+
+    const token = localStorage.getItem('token');
+    console.log(localStorage.getItem('token'));
+
+    if (!token) {
+      router.push('/login?redirect=/submitComplaintForm');
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8000/api/complaints/create/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(form), // no need to include user
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail || 'Failed to submit complaint');
+      }
+
+      const data = await res.json();
+      console.log('Complaint submitted successfully:', data);
+
+      setSubmitted(true);
+      setShowPreview(false);
+      setForm({
+        category: '',
+        title: '',
+        description: '',
+        province: '',
+        district: '',
+        municipality: '',
+        ward: '',
+      });
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center px-6 lg:px-10">
@@ -88,7 +136,7 @@ export default function SubmitComplaintForm() {
         {/* FORM */}
         {!showPreview && !submitted && (
           <form className="space-y-6 bg-white p-8 rounded-lg shadow-lg" onSubmit={handlePreview}>
-            
+
             <div>
               <label className="block mb-1 font-medium">Complaint Category</label>
               <select
