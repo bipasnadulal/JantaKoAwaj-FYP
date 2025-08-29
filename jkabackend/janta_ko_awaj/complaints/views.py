@@ -7,7 +7,8 @@ from .serializers import ComplaintSerializer
 from utils.assign_authority import assign_authority
 from notifications.models import Notification
 from ml.classify import classify_complaint
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from notifications.utils import notify_user, notify_assigned_authorities_for_complaint
 # Create your views here.
 
 class CreateComplaint(APIView):
@@ -37,11 +38,14 @@ class CreateComplaint(APIView):
 
                 assign_authority(complaint)
 
-                Notification.objects.create(
+                notify_user(
                     user=complaint.user,
                     complaint=complaint,
-                    message=f"Your complaint '{complaint.title}' has been marked as genuine and is now under review."
+                    message=f"Your complaint '{complaint.title}' has been marked as genuine and assigned to {complaint.authority}."
                 )
+
+                notify_assigned_authorities_for_complaint(complaint) 
+                
             else:
                 complaint.status = "rejected"
                 complaint.authority = assign_authority(complaint.category)
@@ -57,12 +61,12 @@ class CreateComplaint(APIView):
     
 
 class ListComplaints(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         
-        complaints = Complaint.objects.filter(user=request.user).order_by('-created_at')
-        serializer = ComplaintSerializer(complaints, many=True)
+        complaints = Complaint.objects.filter(status = "genuine").order_by('-created_at')
+        serializer = ComplaintSerializer(complaints, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
         
