@@ -4,6 +4,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from notifications.models import Notification  
+from notifications.utils import notify_user
 
 
 STATUS_CHOICES = [
@@ -39,6 +40,7 @@ class Complaint(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    last_threshold_notified = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return f"{self.title} - {self.user.username}"
@@ -49,8 +51,7 @@ class Complaint(models.Model):
 @receiver(post_save, sender=Complaint)
 def create_complaint_notification(sender, instance, created, **kwargs):
     if created:
-        
-        Notification.objects.create(
+        notify_user(
             user=instance.user,
             complaint=instance,
             message=f"Your complaint '{instance.title}' has been submitted and is under review."
@@ -60,11 +61,12 @@ def create_complaint_notification(sender, instance, created, **kwargs):
 #for the status change notification
 @receiver(pre_save, sender=Complaint)
 def complaint_status_change_notification(sender, instance, **kwargs):
-    if instance.pk: 
+    if instance.pk:
         old_instance = Complaint.objects.get(pk=instance.pk)
         if old_instance.status != instance.status:
-            Notification.objects.create(
+            notify_user(
                 user=instance.user,
                 complaint=instance,
                 message=f"Your complaint '{instance.title}' status changed to '{instance.status}'."
             )
+

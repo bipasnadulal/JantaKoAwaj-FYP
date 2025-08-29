@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'complaints',
     'authorities',
     'notifications',
+    'votes',
 ]
 
 MIDDLEWARE = [
@@ -147,9 +148,28 @@ REST_FRAMEWORK = {
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # if using JWT
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  # optional, can also set per view
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     )
 }
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+#Gmail SMTP configuration settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+#Gmail credentials of JantakoAwaj
+EMAIL_HOST_USER = "jantakoawaj10@gmail.com"
+EMAIL_HOST_PASSWORD = "bvde qpio dwyx wdht" # App password for Gmail SMTP
+
+#Default email sender
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# List of email addresses to receive media alerts
+MEDIA_ALERT_EMAILS = ["bipasna.dulal75@gmail.com"]
 
 
 

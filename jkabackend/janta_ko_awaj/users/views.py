@@ -7,8 +7,10 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .serializers import UserRegisterSerializer
+from rest_framework.permissions import AllowAny
 
 class RegisterUser(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = UserRegisterSerializer(data = request.data)
         if serializer.is_valid():
@@ -19,11 +21,12 @@ class RegisterUser(APIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
 class LoginUser(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         phone = request.data.get('phone')
         password = request.data.get('password')
 
-        user = authenticate(username=phone, password=password)  # now works with phone
+        user = authenticate(username=phone, password=password) 
         if user:
             token, created = Token.objects.get_or_create(user=user)
             return Response({
