@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^7.1.1",
+    "axios": "^1.11.0",
     "chart.js": "^4.5.0",
     "info-nepal": "^2.0.2",
     "next": "15.3.3",
