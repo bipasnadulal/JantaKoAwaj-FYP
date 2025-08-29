@@ -80,7 +80,7 @@ setDropdownOpen(false);
     ) : (
       <>
         <Link href="/dashboard/userdashboard" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Dashboard</Link>
-        <Link href="/profile" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Profile</Link>
+        {/* <Link href="/profile" className='block w-full px-4 py-2 hover:bg-blue-100 text-blue-700'>Profile</Link> */}
         <button onClick={handleLogout} className='w-full text-left px-4 py-2 hover:bg-blue-100 text-blue-700'>Logout</button>
       </>
     )}
