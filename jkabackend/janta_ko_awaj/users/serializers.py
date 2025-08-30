@@ -19,3 +19,19 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         validated_data.pop('confirmPassword')
         user = CustomUser.objects.create_user(**validated_data)
         return user
+    
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    complaints_posted = serializers.SerializerMethodField()
+    total_votes_cast = serializers.SerializerMethodField()
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'phone', 'province', 'district', 'municipality', 'ward', 'complaints_posted', 'total_votes_cast']
+        read_only_fields = ['id', 'phone']
+
+    def get_complaints_posted(self, obj):
+        return obj.complaint_set.count()
+
+    
+    def get_total_votes_cast(self, obj):
+        return obj.votes.count()

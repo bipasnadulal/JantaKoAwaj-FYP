@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Complaint
@@ -9,6 +10,7 @@ from notifications.models import Notification
 from ml.classify import classify_complaint
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from notifications.utils import notify_user, notify_assigned_authorities_for_complaint
+
 # Create your views here.
 
 class CreateComplaint(APIView):
@@ -70,4 +72,9 @@ class ListComplaints(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
         
+class UserComplaintsView(ListAPIView):
+    serializer_class = ComplaintSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Complaint.objects.filter(user=self.request.user)
