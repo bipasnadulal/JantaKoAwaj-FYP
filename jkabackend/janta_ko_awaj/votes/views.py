@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
 from .models import Vote
+from .serializers import VotedComplaintSerializer
 from notifications.utils import notify_vote_thresholds
 
 class VoteAPIView(APIView):
@@ -32,3 +33,14 @@ class VoteAPIView(APIView):
         # Return the updated complaint
         serializer = ComplaintSerializer(complaint, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserVotedComplaintsAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        complaints = Complaint.objects.filter(votes__user=request.user).distinct()
+        serializer = VotedComplaintSerializer(
+            complaints, many=True, context={'request': request}
+        )
+        return Response(serializer.data)

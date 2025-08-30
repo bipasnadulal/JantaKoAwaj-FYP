@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth.hashers import check_password
 from .models import Authority
+from django.contrib.auth.hashers import check_password
 
 class AuthorityLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -10,16 +10,20 @@ class AuthorityLoginSerializer(serializers.Serializer):
         email = data.get('email')
         password = data.get('password')
 
-        # Check if authority exists
         try:
             authority = Authority.objects.get(email=email)
         except Authority.DoesNotExist:
             raise serializers.ValidationError("Invalid email or password")
 
-        # Check password
         if not check_password(password, authority.password):
             raise serializers.ValidationError("Invalid email or password")
 
-        # Attach authority instance to validated data
-        data['user'] = authority
+        data['authority'] = authority
         return data
+
+class AuthoritySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Authority
+        fields = ['id', 'name', 'email', 'role']
+
+
