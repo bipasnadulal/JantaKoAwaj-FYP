@@ -12,7 +12,9 @@ class UserNotificationsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+        return Notification.objects.filter(
+            recipient_user=self.request.user
+        ).order_by('-created_at')
     
 
 class MarkNotificationAsReadView(generics.UpdateAPIView):
@@ -20,7 +22,10 @@ class MarkNotificationAsReadView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Notification.objects.filter(user=self.request.user)
+        return Notification.objects.filter(
+            recipient_user=self.request.user
+        )
+
     
 
 

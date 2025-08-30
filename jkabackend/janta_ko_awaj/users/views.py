@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-from .serializers import UserRegisterSerializer
-from rest_framework.permissions import AllowAny
+from .serializers import UserRegisterSerializer, UserDetailSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class RegisterUser(APIView):
     permission_classes = [AllowAny]
@@ -35,3 +35,18 @@ class LoginUser(APIView):
                 "token": token.key
                 })
         return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class UserDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserDetailSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        serializer = UserDetailSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
