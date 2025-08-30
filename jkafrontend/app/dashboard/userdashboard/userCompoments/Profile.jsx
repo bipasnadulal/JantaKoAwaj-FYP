@@ -1,37 +1,46 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link';
-import infoNepal from 'info-nepal';
+import * as infoNepal from 'info-nepal';
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [user, setUser] = useState({
-    name: 'Ram KC',
-    email: 'ram.kc@example.com',
-    phone: '9801234567',
-    province: 'Bagmati Province',
-    district: 'Kathmandu',
-    municipality: 'Kathmandu Metropolitan City',
-    complaintsPosted: 12,
-    totalVotesCast: 50,
-    resolvedIssues: 7,
-    joinedDate: '2022-01-15',
-  });
-
-  const [form, setForm] = useState({ ...user });
+  const [user, setUser] = useState(null); 
+  const [form, setForm] = useState({});
 
   const provinces = Object.keys(infoNepal.districtsOfProvince);
   const [districts, setDistricts] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
 
-  // Load districts when province changes
+  
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users/user/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setUser(res.data);
+        setForm(res.data);
+      } catch (error) {
+        console.error('Failed to fetch user data', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  
   useEffect(() => {
     if (form.province) {
       const dList = infoNepal.districtsOfProvince[form.province] || [];
@@ -41,7 +50,7 @@ export default function Profile() {
     }
   }, [form.province]);
 
-  // Load municipalities when district changes
+  
   useEffect(() => {
     if (form.district) {
       const mList = infoNepal.localBodies[form.district] || [];
@@ -54,14 +63,23 @@ export default function Profile() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleEditToggle = () => {
+  const handleEditToggle = async () => {
     if (isEditing) {
       setIsSaving(true);
-      setTimeout(() => {
-        setUser(form);
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.put('/api/users/detail/', form, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        setUser(res.data);
+        setForm(res.data);
         setIsEditing(false);
-        setIsSaving(false);
-      }, 800);
+      } catch (error) {
+        console.error('Failed to save user data', error);
+      }
+      setIsSaving(false);
     } else {
       setIsEditing(true);
     }
@@ -71,6 +89,8 @@ export default function Profile() {
     setForm(user);
     setIsEditing(false);
   };
+
+  if (!user) return <p>Loading...</p>;
 
   return (
     <div className="space-y-6">
@@ -88,10 +108,10 @@ export default function Profile() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 rounded-full bg-white text-gray-700 flex items-center justify-center text-4xl font-bold shadow">
-                {user.name.charAt(0)}
+                {user.username.charAt(0)}
               </div>
               <div>
-                <h1 className="text-3xl font-bold">{user.name}</h1>
+                <h1 className="text-3xl font-bold">{user.username}</h1>
               </div>
             </div>
 
@@ -140,21 +160,6 @@ export default function Profile() {
               />
             ) : (
               <p>{user.phone}</p>
-            )}
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-2">Email</h3>
-            {isEditing ? (
-              <input
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-4 py-2"
-              />
-            ) : (
-              <p>{user.email}</p>
             )}
           </div>
 
@@ -209,12 +214,12 @@ export default function Profile() {
         <div className="p-6 bg-gray-50 flex gap-6">
           <div className="flex-1 bg-blue-100 rounded-lg p-6 text-blue-700 font-semibold flex flex-col items-center">
             <ChatBubbleOutlineIcon className="mb-1 w-6 h-6" />
-            <p className="text-2xl">{user.complaintsPosted}</p>
+            <p className="text-2xl">{user.complaints_posted || 0}</p>
             <p className="text-sm">Complaints Posted</p>
           </div>
           <div className="flex-1 bg-purple-100 rounded-lg p-6 text-purple-700 font-semibold flex flex-col items-center">
             <TrendingUpIcon className="mb-1 w-6 h-6" />
-            <p className="text-2xl">{user.totalVotesCast}</p>
+            <p className="text-2xl">{user.total_votes_cast || 0}</p>
             <p className="text-sm">Total Votes Cast</p>
           </div>
         </div>
@@ -222,3 +227,6 @@ export default function Profile() {
     </div>
   );
 }
+
+
+

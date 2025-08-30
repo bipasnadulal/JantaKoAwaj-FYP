@@ -17,10 +17,10 @@ export default function UserDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check if user is logged in
+
     const username = localStorage.getItem('username');
     if (!username) {
-      router.push('/login'); // Redirect to login if not authenticated
+      router.push('/login');
     }
   }, []);
 
