@@ -7,9 +7,11 @@ from .models import Complaint
 from .serializers import ComplaintSerializer
 from utils.assign_authority import assign_authority
 from notifications.models import Notification
+from votes.models import Vote
 from ml.classify import classify_complaint
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from notifications.utils import notify_user, notify_assigned_authorities_for_complaint
+from authorities.auth_backend import AuthorityJWTAuthentication
 
 # Create your views here.
 
@@ -28,17 +30,20 @@ class CreateComplaint(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = ComplaintSerializer(data=request.data)
+        serializer = ComplaintSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             complaint = serializer.save(user=request.user, status="under review")
             text = complaint.title + " " + complaint.description
             result = classify_complaint(text)
 
+            assigned_authority = assign_authority(complaint.category)
+            complaint.authority = assigned_authority
+
             if result == "genuine":
                 complaint.status = "genuine"
                 complaint.save()
 
-                assign_authority(complaint)
+                # assign_authority(complaint)
 
                 notify_user(
                     user=complaint.user,
@@ -78,3 +83,40 @@ class UserComplaintsView(ListAPIView):
 
     def get_queryset(self):
         return Complaint.objects.filter(user=self.request.user)
+
+
+class UserOverviewAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        
+        
+        total_complaints = Complaint.objects.filter(user=user).count()
+        
+        
+        votes_cast = Vote.objects.filter(user=user).count()
+        
+        
+        resolved_issues = Complaint.objects.filter(user=user, status="resolved").count()
+        
+        data = {
+            "total_complaints": total_complaints,
+            "votes_cast": votes_cast,
+            "resolved_issues": resolved_issues,
+        }
+        return Response(data)
+    
+
+
+class AssignedComplaintsView(APIView):
+    authentication_classes = [AuthorityJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        authority = request.user  # Logged-in authority
+        # Filter complaints assigned to this authority
+        complaints = Complaint.objects.filter(authority=authority)
+        serializer = ComplaintSerializer(complaints, many=True)
+        return Response(serializer.data)
+

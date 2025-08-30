@@ -35,7 +35,8 @@ class Complaint(models.Model):
     municipality = models.CharField(max_length=100)
     ward = models.CharField(max_length=50, null=True, blank=True) 
 
-    authority = models.CharField(max_length=100, null=True, blank=True)
+    # authority = models.CharField(max_length=100, null=True, blank=True)
+    authority = models.ForeignKey('authorities.Authority', on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

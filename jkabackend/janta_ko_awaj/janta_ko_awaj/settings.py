@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #my apps
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     "corsheaders",
     'users',
     'complaints',
@@ -135,6 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 AUTHENTICATION_BACKENDS = [
@@ -144,8 +147,9 @@ AUTHENTICATION_BACKENDS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authorities.auth_backend.AuthorityJWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',  # for DRF Token
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # if using JWT
+          # if using JWT
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
