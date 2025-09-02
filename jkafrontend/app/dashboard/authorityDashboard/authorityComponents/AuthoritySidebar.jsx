@@ -1,13 +1,16 @@
+
 'use client';
 import React from 'react';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from '@mui/icons-material/Logout';
 
-export default function AuthoritySidebar({ activeTab, setActiveTab }) {
+export default function AuthoritySidebar({ activeTab, setActiveTab, handleLogout }) {
   const tabs = [
     { key: 'overview', label: 'Overview', icon: <DashboardIcon /> },
-    { key: 'complaints', label: 'Complaints', icon: <ReportProblemIcon /> },
+    { key: 'complaints', label: 'Assigned Complaints', icon: <ReportProblemIcon /> },
+    { key: 'complaints_status', label: 'Complaints by Status', icon: <ReportProblemIcon /> },
     { key: 'notifications', label: 'Notifications', icon: <NotificationsIcon /> },
   ];
 
@@ -33,6 +36,16 @@ export default function AuthoritySidebar({ activeTab, setActiveTab }) {
           </button>
         ))}
       </nav>
+
+      <div className="p-4 border-t">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-2 rounded-md text-left text-sm font-medium text-red-600 hover:bg-red-50"
+        >
+          <LogoutIcon />
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

@@ -31,11 +31,11 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (res.ok) {
-        // Save user data to localStorage
+
         localStorage.setItem('username', data.username);
         if (data.token) localStorage.setItem('token', data.token);
 
-        // Redirect to the page user originally wanted
+
         router.push(redirectPath);
       } else {
         setError(data.error || 'Invalid credentials. Please try again.');

@@ -1,14 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from './userCompoments/Sidebar';
-import OverviewCards from './userCompoments/OverviewCards';
-import StatusOverview from './userCompoments/StatusOverview';
-import RecentActivity from './userCompoments/RecentActivity';
-import Profile from './userCompoments/Profile';
-import UserComplaints from './userCompoments/UserComplaints';
-import VotingHistory from './userCompoments/VotingHistory';
-import UserNotifications from './userCompoments/UserNotifications';
+import Sidebar from './userComponents/Sidebar';
+import OverviewCards from './userComponents/OverviewCards';
+import StatusOverview from './userComponents/StatusOverview';
+import RecentActivity from './userComponents/RecentActivity';
+import Profile from './userComponents/Profile';
+import UserComplaints from './userComponents/UserComplaints';
+import VotingHistory from './userComponents/VotingHistory';
+import UserNotifications from './userComponents/UserNotifications';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 
@@ -63,10 +63,10 @@ export default function UserDashboard() {
                 </div>
               </div>
             </div>
-            <OverviewCards />
+            <OverviewCards setActiveTab={setActiveTab} />
             <div className="grid lg:grid-cols-2 gap-6 mt-6">
-              <StatusOverview />
-              <RecentActivity />
+              {/* <StatusOverview /> */}
+              {/* <RecentActivity /> */}
             </div>
           </>
         )}

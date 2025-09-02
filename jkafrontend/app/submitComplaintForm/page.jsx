@@ -26,7 +26,7 @@ export default function SubmitComplaintForm() {
   const [municipalities, setMunicipalities] = useState([]);
 
   const categories = [
-    'Education',
+    'Education ',
     'Environment',
     'Municipal Guard',
     'Agriculture and Livestocks',
@@ -96,6 +96,8 @@ export default function SubmitComplaintForm() {
         },
         body: JSON.stringify(form), // no need to include user
       });
+
+      console.log(form)
 
       if (!res.ok) {
         const errData = await res.json();
@@ -221,8 +223,8 @@ export default function SubmitComplaintForm() {
                 className="w-full border px-4 py-2 rounded"
               >
                 <option value="">-- Select Municipality --</option>
-                {municipalities.map((m) => (
-                  <option key={m} value={m}>{m}</option>
+                {municipalities.map((m, index) => (
+                  <option key={`${m}-${index}`} value={m}>{m}</option>
                 ))}
               </select>
             </div>
