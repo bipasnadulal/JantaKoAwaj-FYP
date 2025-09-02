@@ -19,12 +19,12 @@ def notify_authority(authority, complaint, message: str):
     )
 
 def notify_assigned_authorities_for_complaint(complaint):
-    """Notify relevant authorities when a complaint is assigned (or classified genuine)."""
-    for auth in get_authorities_for_category(complaint.category):
-        notify_authority(
-            authority=auth,
+    assigned_authority = complaint.authority  
+    if assigned_authority:
+        Notification.objects.create(
+            recipient_authority=assigned_authority, 
             complaint=complaint,
-            message=f"New complaint assigned: '{complaint.title}' in {complaint.municipality}, {complaint.district}."
+            message=f"Complaint '{complaint.title}' has been assigned to you.",
         )
 
 def notify_vote_thresholds(complaint, agree_votes: int, total_votes: int):
@@ -32,7 +32,9 @@ def notify_vote_thresholds(complaint, agree_votes: int, total_votes: int):
     Notify when agree % crosses thresholds (25, 50, 80).
     Uses complaint.last_threshold_notified to avoid duplicate alerts.
     """
-    if total_votes == 0:
+    
+
+    if total_votes < 10: 
         return
 
     pct = int((agree_votes / total_votes) * 100)
@@ -78,3 +80,8 @@ def notify_vote_thresholds(complaint, agree_votes: int, total_votes: int):
 
     # persist last fired threshold
     Complaint.objects.filter(pk=complaint.pk).update(last_threshold_notified=fire)
+
+
+
+
+

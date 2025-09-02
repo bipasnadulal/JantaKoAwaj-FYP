@@ -1,10 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from rest_framework.permissions import IsAuthenticated
 from .models import Authority
-from complaints.models import Complaint
-from complaints.serializers import ComplaintSerializer
 from .serializers import AuthorityLoginSerializer, AuthoritySerializer
 from .auth_backend import AuthorityJWTAuthentication
 from rest_framework import status
@@ -34,7 +31,7 @@ class AuthorityLoginView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-# Get Authority Details (for logged-in authority)
+
 
 class AuthorityDetailView(APIView):
     authentication_classes = [AuthorityJWTAuthentication]
