@@ -10,6 +10,7 @@ from notifications.utils import notify_user
 STATUS_CHOICES = [
     ("under review", "Under Review"),
     ("genuine", "Genuine"),
+    ("reviewed", "Reviewed"),
     ("rejected", "Rejected"),
     ("in-progress", "In Progress"),
     ("resolved", "Resolved"),
@@ -40,6 +41,10 @@ class Complaint(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    progress = models.PositiveIntegerField(default=0)
+    response_text = models.TextField(blank=True, null=True)
+    response_file = models.FileField(upload_to="complaint_responses/", blank=True, null=True)
     
     last_threshold_notified = models.PositiveSmallIntegerField(default=0)
 
@@ -71,3 +76,14 @@ def complaint_status_change_notification(sender, instance, **kwargs):
                 message=f"Your complaint '{instance.title}' status changed to '{instance.status}'."
             )
 
+
+class ComplaintUpdate(models.Model):
+    complaint = models.ForeignKey("Complaint", on_delete=models.CASCADE, related_name="updates")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    progress = models.PositiveIntegerField(default=0)
+    response_text = models.TextField(blank=True, null=True)
+    response_file = models.FileField(upload_to="complaint_responses/", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.complaint.title} - {self.status} ({self.progress}%)"

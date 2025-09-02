@@ -176,4 +176,6 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 MEDIA_ALERT_EMAILS = ["bipasna.dulal75@gmail.com"]
 
 
-
+# to upload media files like complaint response files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
