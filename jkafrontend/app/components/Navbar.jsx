@@ -39,8 +39,8 @@ export default function Navbar() {
     };
 
     fetchNotifications();
-    // const interval = setInterval(fetchNotifications, 60000); // Fetch every 60 seconds
-    // return () => clearInterval(interval);
+    const interval = setInterval(fetchNotifications, 60000); // Fetch every 60 seconds
+    return () => clearInterval(interval);
   }, []);
 
   const handleLogout = () => {
@@ -77,17 +77,6 @@ export default function Navbar() {
 
         {/* Right: Icons and Language switching */}
         <div className="flex items-center space-x-4">
-
-          {/* Notification Icon with Badge */}
-
-          {/* <Link href="/dashboard/userdashboard/userComponents/UserNotifications" className='relative'>
-            <NotificationsNoneIcon style={{ fontSize: 30 }} />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-xs font-bold rounded-full px-1.5 py-0.5">
-                {unreadCount}
-              </span>
-            )}
-          </Link> */}
 
           <button
             className="relative text-white hover:text-blue-200 cursor-pointer"
