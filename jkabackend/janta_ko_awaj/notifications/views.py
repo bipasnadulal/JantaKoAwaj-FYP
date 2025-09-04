@@ -19,16 +19,6 @@ class UserNotificationsView(generics.ListAPIView):
         ).order_by('-created_at')
     
 
-# class MarkNotificationAsReadView(generics.UpdateAPIView):
-#     serializer_class = NotificationSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-#     def get_queryset(self):
-#         return Notification.objects.filter(
-#             recipient_user=self.request.user
-#         )
-
-
 class MarkNotificationAsReadView(generics.UpdateAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [permissions.IsAuthenticated]

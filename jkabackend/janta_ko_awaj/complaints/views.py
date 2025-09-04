@@ -80,7 +80,6 @@ class CreateComplaint(APIView):
         )
 
     
-
 class ListComplaints(APIView):
     permission_classes = [AllowAny]
 
@@ -122,7 +121,6 @@ class UserOverviewAPIView(APIView):
         return Response(data)
     
 
-
 class AssignedComplaintsView(APIView):
     authentication_classes = [AuthorityJWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -134,77 +132,6 @@ class AssignedComplaintsView(APIView):
         serializer = ComplaintSerializer(complaints, many=True)
         return Response(serializer.data)
     
-
-
-
-# class UpdateComplaintStatusView(UpdateAPIView):
-#     queryset = Complaint.objects.all()
-#     serializer_class = ComplaintSerializer
-#     authentication_classes = [AuthorityJWTAuthentication]
-#     permission_classes = [permissions.IsAuthenticated]
-
-    
-#     STATUS_MESSAGES = {
-#         'submitted': 'has been submitted',
-#         'in_progress': 'is now in progress',
-#         'reviewed': 'has been reviewed',
-#         'genuine': 'has been marked as genuine',
-#         'resolved': 'has been resolved',
-#         'rejected': 'has been rejected'
-#     }
-
-#     def update(self, request, *args, **kwargs):
-#         complaint = self.get_object()
-#         authority = request.user  
-
-#         if complaint.authority != authority:
-#             return Response({"error": "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
-
-#         old_status = complaint.status
-
-#         serializer = self.get_serializer(complaint, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             updated_complaint = serializer.instance
-#             new_status = updated_complaint.status
-
-            
-#             ComplaintUpdate.objects.create(
-#                 complaint=updated_complaint,
-#                 status=new_status,
-#                 progress=updated_complaint.progress,
-#                 response_text=request.data.get("response_text", ""),
-#                 response_file=request.data.get("response_file")
-#             )
-
-           
-#             if complaint.user and old_status != new_status:
-#                 status_message = self.STATUS_MESSAGES.get(new_status, "status updated")
-#                 Notification.objects.create(
-#                     recipient_user=complaint.user,
-#                     complaint=complaint,
-#                     message=f"Your complaint '{complaint.title}' {status_message}."
-#                 )
-
-#             response_text = request.data.get("response_text")
-#             if complaint.user and response_text:
-#                 Notification.objects.create(
-#                     recipient_user=complaint.user,
-#                     complaint=complaint,
-#                     message=f"The authority responded to your complaint '{complaint.title}': {response_text[:100]}"
-#                 )
-
-#             Notification.objects.create(
-#                 recipient_authority=authority,
-#                 complaint=complaint,
-#                 message=f"You updated complaint '{complaint.title}' from '{old_status}' to '{new_status}'."
-#             )
-            
-
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UpdateComplaintStatusView(UpdateAPIView):
     queryset = Complaint.objects.all()
@@ -225,13 +152,13 @@ class UpdateComplaintStatusView(UpdateAPIView):
         complaint = self.get_object()
         authority = request.user  
 
-        # Check authority ownership
+        # Check authority (for authorization)
         if complaint.authority != authority:
             return Response({"error": "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
 
         old_status = complaint.status
 
-        # Only allow specific fields to be updated
+        
         allowed_fields = ["status", "progress", "response_text", "response_file"]
         data = {field: request.data[field] for field in allowed_fields if field in request.data}
 
@@ -277,16 +204,16 @@ class UpdateComplaintStatusView(UpdateAPIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # If invalid, log errors for debugging
-        print("Update errors:", serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # # If invalid, log errors for debugging
+        # print("Update errors:", serializer.errors)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ComplaintCountsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        authority = request.user  # logged-in authority
+        authority = request.user  
         assigned_complaints = Complaint.objects.filter(authority=authority)
 
         total = assigned_complaints.count()
@@ -314,7 +241,7 @@ class ComplaintHistoryView(APIView):
 class ComplaintsSummaryAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request):
+    def get(self):
         total = Complaint.objects.count()
         statuses = [
             {"label": "Complaint Registered", "count": total},
@@ -329,7 +256,6 @@ class ComplaintsSummaryAPIView(APIView):
 
         return Response({"total": total, "statuses": statuses})
     
-
 
 class TopComplaintsView(APIView):
     permission_classes = [AllowAny] 

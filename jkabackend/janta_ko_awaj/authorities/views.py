@@ -5,11 +5,10 @@ from .models import Authority
 from .serializers import AuthorityLoginSerializer, AuthoritySerializer
 from .auth_backend import AuthorityJWTAuthentication
 from rest_framework import status
-
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-# Login View
+
 class AuthorityLoginView(APIView):
     permission_classes = [permissions.AllowAny]
     def post(self, request):
@@ -29,8 +28,6 @@ class AuthorityLoginView(APIView):
                 "role": authority.role
             }
         }, status=status.HTTP_200_OK)
-
-
 
 
 class AuthorityDetailView(APIView):

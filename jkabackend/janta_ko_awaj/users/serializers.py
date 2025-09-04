@@ -32,6 +32,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     def get_complaints_posted(self, obj):
         return obj.complaint_set.count()
 
-    
     def get_total_votes_cast(self, obj):
         return obj.votes.count()
+    
+    

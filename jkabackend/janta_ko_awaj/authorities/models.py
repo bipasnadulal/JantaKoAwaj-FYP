@@ -12,7 +12,7 @@ class Authority(models.Model):
     ]
 
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128, null=True, blank=True)  # store hashed password
+    password = models.CharField(max_length=128, null=True, blank=True)
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="infrastructure")
     created_at = models.DateTimeField(default=timezone.now)

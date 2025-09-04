@@ -173,7 +173,7 @@ EMAIL_HOST_PASSWORD = "bvde qpio dwyx wdht" # App password for Gmail SMTP
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # List of email addresses to receive media alerts
-MEDIA_ALERT_EMAILS = ["bipasna.dulal75@gmail.com"]
+MEDIA_ALERT_EMAILS = ["dulalbipasna75@gmail.com"]
 
 
 # to upload media files like complaint response files
