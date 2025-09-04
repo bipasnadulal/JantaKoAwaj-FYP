@@ -252,7 +252,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
-// import { toast } from 'react-hot-toast';
+
 
 const UserNotifications = forwardRef((props, ref) => {
   const [notifications, setNotifications] = useState([]);
@@ -262,7 +262,7 @@ const UserNotifications = forwardRef((props, ref) => {
     Authorization: `Token ${localStorage.getItem("token")}`,
   };
 
-  // Fetch notifications from API
+
   const fetchNotifications = async () => {
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/notifications/`, {
@@ -274,7 +274,7 @@ const UserNotifications = forwardRef((props, ref) => {
     }
   };
 
-  // Expose refresh to parent
+
   useImperativeHandle(ref, () => ({
     refresh: fetchNotifications,
   }));
@@ -308,7 +308,7 @@ const UserNotifications = forwardRef((props, ref) => {
     }
   };
 
-  // Mark single notification as read
+
   const markAsRead = async (id) => {
     try {
       await axios.patch(
@@ -325,7 +325,7 @@ const UserNotifications = forwardRef((props, ref) => {
     }
   };
 
-  // Mark all unread notifications as read
+
   const markAllAsRead = async () => {
     try {
       const unreadIds = notifications.filter((n) => !n.read).map((n) => n.id);
@@ -401,17 +401,16 @@ const UserNotifications = forwardRef((props, ref) => {
             </div>
           </div>
 
-          {/* Filters */}
+
           <div className="flex gap-2 mb-4">
             {['all', 'unread', 'high'].map((type) => (
               <button
                 key={type}
                 onClick={() => setFilter(type)}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 ${
-                  filter === type
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 ${filter === type
                     ? 'bg-blue-100 text-blue-700 border border-blue-200'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                  }`}
               >
                 {type === 'all' && `All (${notifications.length})`}
                 {type === 'unread' && `Unread (${unreadCount})`}
@@ -421,7 +420,7 @@ const UserNotifications = forwardRef((props, ref) => {
           </div>
         </div>
 
-        {/* Notification List */}
+
         <div className="p-6">
           {filteredNotifications.length > 0 ? (
             <div className="space-y-4">
@@ -430,9 +429,8 @@ const UserNotifications = forwardRef((props, ref) => {
                 return (
                   <div
                     key={n.id}
-                    className={`relative p-4 rounded-lg border transition-all duration-200 ${
-                      n.read ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 shadow-sm'
-                    }`}
+                    className={`relative p-4 rounded-lg border transition-all duration-200 ${n.read ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 shadow-sm'
+                      }`}
                   >
                     <div className="flex gap-4 items-start">
                       <div className={`p-2 rounded-lg border ${colorClass(n.type, n.priority)}`}>

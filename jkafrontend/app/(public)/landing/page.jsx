@@ -90,7 +90,7 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Second row: 2 features */}
+            {/* features */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
               <div className="flex flex-col items-center bg-blue-50 p-8 rounded shadow-md">
                 <VibrationIcon className="mb-4" style={{ fontSize: '4rem', color: '#3b3b3b' }} />

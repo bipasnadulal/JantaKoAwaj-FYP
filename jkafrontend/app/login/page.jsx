@@ -48,7 +48,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left Side - Logo */}
+
       <div className="w-1/2 bg-blue-500 flex items-center justify-center px-10">
         <div className="flex flex-col items-center justify-center w-full text-center">
           <Image src="/jantakoawajLogo.png" alt="Logo" width={160} height={160} />
@@ -58,14 +58,14 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Side - Form */}
+
       <div className="w-1/2 flex items-center justify-center px-8 py-12 bg-white">
         <div className="w-full max-w-md">
           <h2 className="text-2xl font-bold text-blue-700 mb-6">Login to Your Account</h2>
           {error && <p className="text-red-500 mb-4">{error}</p>}
 
           <form className="space-y-5" onSubmit={handleLogin}>
-            {/* Phone Number */}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Phone Number
@@ -79,7 +79,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password */}
+
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -99,7 +99,7 @@ export default function LoginPage() {
               </span>
             </div>
 
-            {/* Login Button */}
+
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition"

@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,9 +22,6 @@ export default function ComplaintCard({ complaint, onVote }) {
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
-  const totalVotes = localComplaint.agreeVotes + localComplaint.disagreeVotes;
-  const agreePercentage = totalVotes > 0 ? (localComplaint.agreeVotes / totalVotes) * 100 : 0;
-
   const handleVote = async (complaintId, voteType) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -41,12 +37,9 @@ export default function ComplaintCard({ complaint, onVote }) {
         { vote_type: voteType },
         { headers: { Authorization: `Token ${token}`, 'Content-Type': 'application/json' } }
       );
-      console.log(response.data);
-
       const updatedComplaint = response.data;
       setLocalComplaint(updatedComplaint);
       setCurrentVote(updatedComplaint.userVote);
-
       if (onVote) onVote(updatedComplaint);
     } catch (error) {
       console.error("Error while voting:", error);
@@ -56,6 +49,7 @@ export default function ComplaintCard({ complaint, onVote }) {
   };
 
   const getStatusIcon = (status) => {
+    if (!status) return <ErrorIcon fontSize="small" className="text-gray-500" />;
     switch (status) {
       case 'pending': return <HourglassEmptyIcon fontSize="small" className="text-yellow-500" />;
       case 'in-progress': return <TrendingUpIcon fontSize="small" className="text-blue-500" />;
@@ -88,12 +82,13 @@ export default function ComplaintCard({ complaint, onVote }) {
 
   const toggleStatus = async () => {
     setShowProgress(!showProgress);
-
     if (!showProgress && history.length === 0) {
       setLoadingHistory(true);
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/complaints/${localComplaint.id}/history/`);
-        setHistory(response.data);
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/complaints/${localComplaint.id}/history/`
+        );
+        setHistory(response.data || []);
       } catch (err) {
         console.error("Error fetching complaint history:", err);
       } finally {
@@ -102,7 +97,8 @@ export default function ComplaintCard({ complaint, onVote }) {
     }
   };
 
-  const progressPct = totalVotes > 0 ? (localComplaint.agreeVotes / totalVotes) * 100 : 0;
+  const formatStatus = (status) =>
+    status ? status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : '';
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden">
@@ -112,7 +108,7 @@ export default function ComplaintCard({ complaint, onVote }) {
           <div className="flex items-center gap-3 flex-wrap">
             <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(localComplaint.status)}`}>
               {getStatusIcon(localComplaint.status)}
-              {localComplaint.status.charAt(0).toUpperCase() + localComplaint.status.slice(1)}
+              {formatStatus(localComplaint.status)}
             </span>
             <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(localComplaint.category)}`}>
               <TagIcon style={{ fontSize: '1rem' }} />
@@ -132,21 +128,15 @@ export default function ComplaintCard({ complaint, onVote }) {
           <span>{localComplaint.location || 'Not Specified'}</span>
         </div>
 
-        {/* Voting Progress Bar */}
-        <div className="mb-4">
-          <div className="flex justify-between text-xs text-gray-600 mb-2">
-            <span>Community Support</span>
-            <span>{totalVotes} votes</span>
+        {/* Voting Counts */}
+        <div className="mb-4 flex gap-4 text-xs text-gray-600">
+          <div className="flex items-center gap-1">
+            <ThumbUpIcon fontSize="small" className="text-green-500" />
+            <span>{localComplaint.agreeVotes} Agree</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div
-              className="bg-gradient-to-r from-green-400 to-green-500 h-2 rounded-full transition-all duration-500"
-              style={{ width: `${agreePercentage}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>{agreePercentage.toFixed(0)}% agree</span>
-            <span>{(100 - agreePercentage).toFixed(0)}% disagree</span>
+          <div className="flex items-center gap-1">
+            <ThumbDownIcon fontSize="small" className="text-red-500" />
+            <span>{localComplaint.disagreeVotes} Disagree</span>
           </div>
         </div>
 
@@ -183,57 +173,41 @@ export default function ComplaintCard({ complaint, onVote }) {
           </button>
         </div>
 
-
-
+        {/* Complaint history */}
         {showProgress && (
           <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
             {loadingHistory ? (
               <p>Loading history...</p>
-            ) : history.length === 0 ? (
+            ) : !history || history.length === 0 ? (
               <p>No updates available.</p>
             ) : (
               <div className="flex flex-col">
                 {history.map((update, index) => {
-                  // Format status nicely: "in_progress" => "In Progress"
-                  const formatStatus = (status) =>
-                    status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-
-                  // Format date nicely: MM/DD/YYYY, HH:MM AM/PM
-                  const formattedDate = new Date(update.created_at).toLocaleString('en-US', {
-                    month: '2-digit',
-                    day: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  });
-
-                  // Build full URL for downloadable file
+                  const formattedDate = update.created_at
+                    ? new Date(update.created_at).toLocaleString('en-US', {
+                      month: '2-digit',
+                      day: '2-digit',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                    : '';
                   const fileUrl = update.response_file
                     ? `${process.env.NEXT_PUBLIC_API_URL}${update.response_file}`
                     : null;
-
                   return (
                     <div
                       key={update.id}
                       className="mb-4 relative pl-6 p-3 bg-white rounded-md shadow-sm"
                     >
-
                       <span className="absolute left-0 top-3 w-2 h-2 bg-blue-500 rounded-full" />
-
-
                       <p className="text-xs text-gray-500 mb-1">{formattedDate}</p>
-
-
-                      <p className="font-medium text-gray-800 mb-1">
-                        {formatStatus(update.status)} ({progressPct.toFixed(0)}%)
+                      <p className="font-medium text-gray-800 mb-2">
+                        {formatStatus(update.status)} ({update.progress || 0}%)
                       </p>
-
-
                       {update.response_text && (
                         <p className="text-gray-600 text-sm mb-1">{update.response_text}</p>
                       )}
-
-
                       {fileUrl && (
                         <a
                           href={fileUrl}
@@ -244,8 +218,6 @@ export default function ComplaintCard({ complaint, onVote }) {
                           Download File
                         </a>
                       )}
-
-
                       {index < history.length - 1 && <hr className="my-2 border-gray-300" />}
                     </div>
                   );
@@ -254,9 +226,10 @@ export default function ComplaintCard({ complaint, onVote }) {
             )}
           </div>
         )}
-
       </div>
     </div>
   );
 }
+
+
 

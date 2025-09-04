@@ -54,9 +54,9 @@ export default function Navbar() {
   return (
     <nav className="bg-blue-500 shadow-md py-5 fixed top-0 left-0 w-full z-50 ">
       <div className='max-w-7xl mx-auto px-6 md:px-12 lg:px-10 flex items-center justify-between'>
-        {/* Left: Logo and Nav */}
+
         <div className="flex items-center space-x-8">
-          {/* Logo */}
+
           <Link href="/">
             <Image
               src="/jantakoawajLogo.png"
@@ -67,7 +67,7 @@ export default function Navbar() {
             />
             {/* <h1 className="font-bold text-xl md:text-2xl text-white cursor-pointer">Janta Ko Awaj</h1> */}
           </Link>
-          {/* Nav Links */}
+
           <div className="hidden md:flex space-x-6 text-white">
             <Link href="/">Home</Link>
             <a href="/about">About Us</a>
@@ -75,7 +75,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right: Icons and Language switching */}
+
         <div className="flex items-center space-x-4">
 
           <button
@@ -90,7 +90,7 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Profile Icon with Dropdown*/}
+
           <div className="relative">
             <button className='text-white hover:text-blue-200 cursor-pointer'
               onClick={() => {
@@ -117,12 +117,10 @@ export default function Navbar() {
                 )}
               </div>
             )}
-
-
-
           </div>
+
           {/* Language Dropdown */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() => {
                 setDropdownOpen(!dropdownOpen);
@@ -151,7 +149,7 @@ export default function Navbar() {
                 </button>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* Hamburger Menu Button for small screen size */}
           <button

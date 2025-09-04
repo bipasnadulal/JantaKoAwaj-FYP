@@ -12,7 +12,7 @@ export default function VotingHistory() {
   const [searchTerm, setSearchTerm] = useState('');
   const [voteFilter, setVoteFilter] = useState('all');
 
-  // Fetch voted complaints
+  
   useEffect(() => {
     const fetchVotedComplaints = async () => {
       const token = localStorage.getItem('token'); 
@@ -71,7 +71,7 @@ export default function VotingHistory() {
           <p className="text-gray-500 text-center">Loading voting history...</p>
         ) : filtered.length > 0 ? (
           <>
-            {/* Filter Tabs */}
+            
             <div className="flex flex-wrap gap-2 mb-4">
               <button
                 onClick={() => setVoteFilter('all')}
@@ -107,7 +107,7 @@ export default function VotingHistory() {
               </button>
             </div>
 
-            {/* Search */}
+            
             <div className="relative mb-4">
               <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fontSize="small" />
               <input
@@ -119,7 +119,6 @@ export default function VotingHistory() {
               />
             </div>
 
-            {/* Complaints List */}
             <div className="space-y-4">
               {filtered.map((complaint) => (
                 <ComplaintCard key={complaint.id} complaint={complaint} />

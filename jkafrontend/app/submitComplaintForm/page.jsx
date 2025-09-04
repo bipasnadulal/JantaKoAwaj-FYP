@@ -94,7 +94,7 @@ export default function SubmitComplaintForm() {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify(form), // no need to include user
+        body: JSON.stringify(form),
       });
 
       console.log(form)
@@ -245,7 +245,7 @@ export default function SubmitComplaintForm() {
               </select>
             </div>
 
-            {/* Preview */}
+
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition"

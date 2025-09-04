@@ -13,16 +13,16 @@ export default function UserComplaints() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [loading, setLoading] = useState(true);
 
-  
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const fetchComplaints = async () => {
       try {
-        
+
         const res = await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/complaints/user/`, {
-          headers: { Authorization: `Token ${token}` },
-        })
+          .get(`${process.env.NEXT_PUBLIC_API_URL}/api/complaints/user/`, {
+            headers: { Authorization: `Token ${token}` },
+          })
         setComplaints(res.data || []);
       } catch (error) {
         console.error('Failed to fetch complaints:', error);
@@ -59,18 +59,18 @@ export default function UserComplaints() {
         { vote: voteType },
         { headers: { Authorization: `Token ${token}` } }
       );
-      
+
       setComplaints((prev) =>
         prev.map((c) =>
           c.id === id
             ? {
-                ...c,
-                agreeVotes:
-                  voteType === 'agree' ? c.agreeVotes + 1 : c.agreeVotes,
-                disagreeVotes:
-                  voteType === 'disagree' ? c.disagreeVotes + 1 : c.disagreeVotes,
-                userVote: voteType,
-              }
+              ...c,
+              agreeVotes:
+                voteType === 'agree' ? c.agreeVotes + 1 : c.agreeVotes,
+              disagreeVotes:
+                voteType === 'disagree' ? c.disagreeVotes + 1 : c.disagreeVotes,
+              userVote: voteType,
+            }
             : c
         )
       );
@@ -112,17 +112,16 @@ export default function UserComplaints() {
             </Link>
           </div>
 
-          {/* Status Filter Tabs */}
+
           <div className="flex flex-wrap gap-2 mb-4">
             {Object.entries(statusCounts).map(([status, count]) => (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 ${
-                  statusFilter === status
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 ${statusFilter === status
                     ? 'bg-blue-100 text-blue-700 border border-blue-200'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                  }`}
               >
                 {status === 'all'
                   ? 'All'
@@ -132,7 +131,7 @@ export default function UserComplaints() {
             ))}
           </div>
 
-          {/* Search */}
+
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
@@ -145,7 +144,7 @@ export default function UserComplaints() {
           </div>
         </div>
 
-        {/* Complaints List */}
+
         <div className="p-6">
           {filteredComplaints.length > 0 ? (
             <div className="space-y-4">

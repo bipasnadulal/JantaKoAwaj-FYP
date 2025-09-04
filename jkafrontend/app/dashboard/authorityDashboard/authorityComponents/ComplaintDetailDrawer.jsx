@@ -21,65 +21,9 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
     }
   }, [complaint]);
 
-  
+
 
   if (!complaint) return null;
-
-  
-
-
-  // const handleSave = async () => {
-  //   if (!responseText.trim()) {
-  //     setError('Official written response is required.');
-  //     return;
-  //   }
-  //   setError('');
-  //   setLoading(true);
-
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append('status', status);
-  //     formData.append('progress', progress);
-  //     formData.append('response_text', responseText);
-  //     if (responseFile) formData.append('response_file', responseFile);
-
-  //     const token = localStorage.getItem('access');
-
-  //     const res = await fetch(
-  //       `http://127.0.0.1:8000/api/complaints/${complaint.id}/update/`,
-  //       {
-  //         method: 'PATCH',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           // Do NOT include 'Content-Type': 'multipart/form-data'
-  //           // fetch automatically sets correct boundaries when using FormData
-  //         },
-  //         body: formData,
-  //       }
-  //     );
-
-  //     if (!res.ok) {
-  //       const errData = await res.json();
-  //       setError(errData.error || 'Failed to update complaint.');
-  //       return;
-  //     }
-
-  //     const updatedComplaint = await res.json();
-
-  //     // Refresh parent table if callback provided
-  //     if (onUpdated) onUpdated(updatedComplaint);
-  //     if (onNotificationsRefresh) {
-  //       onNotificationsRefresh();  // fetch the latest notifications from your backend
-  //     }
-
-  //     onClose();
-  //   } catch (err) {
-  //     console.error(err);
-  //     setError('Network error. Please try again.');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSave = async () => {
     if (!responseText.trim()) {
@@ -115,17 +59,17 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
 
       const updatedComplaint = await res.json();
 
-      // Refresh parent table
+      
       if (onUpdated) onUpdated(updatedComplaint);
 
-      // Refresh local state with updated complaint
+      
       setStatus(updatedComplaint.status || '');
       setProgress(updatedComplaint.progress || 0);
       setResponseText(updatedComplaint.response_text || '');
 
       if (onNotificationsRefresh) onNotificationsRefresh();
 
-      // Optionally close drawer
+      
       onClose();
     } catch (err) {
       console.error(err);
@@ -140,7 +84,7 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
   return (
     <Drawer anchor="right" open={!!complaint} onClose={onClose}>
       <div className="w-[400px] max-w-full p-6 flex flex-col gap-4 bg-white min-h-full">
-        {/* Header */}
+        
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-blue-600">
             Complaint Details
@@ -150,11 +94,11 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
           </IconButton>
         </div>
 
-        {/* Info */}
+        
         <p><strong>Title:</strong> {complaint.title}</p>
         <p><strong>Description:</strong> {complaint.description}</p>
 
-        {/* Location */}
+        
         <div className="bg-gray-50 p-3 rounded-md">
           <p className="font-medium text-gray-700">
             <LocationOnIcon /> <b>Location</b>
@@ -167,7 +111,7 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
 
         <p><strong>Status:</strong> {status}</p>
 
-        {/* Update Section */}
+        
         <div className="space-y-3 mt-4">
           <label className="block text-sm font-medium">Update Status</label>
           <select
@@ -185,7 +129,7 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
           <input
             type="number"
             value={progress}
-            onChange={(e) => setProgress(e.target.value)}
+            onChange={(e) => setProgress(Number(e.target.value))}
             className="w-full border px-3 py-2 rounded"
             min="0"
             max="100"

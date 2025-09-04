@@ -56,7 +56,6 @@ export default function AuthorityLoginPage() {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
           <div>
             <label className="block mb-1 text-gray-700">Email</label>
             <input
@@ -68,7 +67,6 @@ export default function AuthorityLoginPage() {
             />
           </div>
 
-          {/* Password */}
           <div className="relative">
             <label className="block mb-1 text-gray-700">Password</label>
             <input
@@ -87,7 +85,6 @@ export default function AuthorityLoginPage() {
             </button>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}

@@ -37,7 +37,7 @@ export default function AuthorityNotifications() {
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000); // auto-refresh
+    const interval = setInterval(fetchNotifications, 30000); 
     return () => clearInterval(interval);
   }, [fetchNotifications]);
 
@@ -133,7 +133,7 @@ export default function AuthorityNotifications() {
 
       <div className="bg-white rounded-xl shadow-sm">
         <div className="px-6 pt-2 border-b border-gray-100">
-          {/* Header */}
+          
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-3">
               <div className="bg-blue-600 p-2 rounded-lg">
@@ -165,7 +165,7 @@ export default function AuthorityNotifications() {
             </div>
           </div>
 
-          {/* Filters */}
+         
           <div className="flex gap-2 mb-4">
             {['all', 'unread', 'high'].map((type) => (
               <button

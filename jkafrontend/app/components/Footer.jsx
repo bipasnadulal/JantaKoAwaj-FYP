@@ -5,7 +5,7 @@ export default function Footer(){
         <footer className="bg-blue-500 text-white py-8 px-6 mt-20">
   <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto px-6 md:px-12 lg:px-10 ">
     
-    {/* Logo / Name */}
+   
     <div>
       <h2 className="text-2xl font-bold">Janta ko Aawaj</h2>
       <p className="text-sm mt-2 opacity-80">
@@ -13,7 +13,7 @@ export default function Footer(){
       </p>
     </div>
 
-    {/* Quick Links */}
+    
     <div>
       <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
       <ul className="space-y-1 text-sm">
@@ -25,7 +25,7 @@ export default function Footer(){
       </ul>
     </div>
 
-    {/* Credits + Disclaimer */}
+    
     <div>
       <h3 className="text-lg font-semibold mb-3">Info</h3>
       <p className="text-sm mb-2">
@@ -37,7 +37,7 @@ export default function Footer(){
     </div>
   </div>
 
-  {/* Bottom line */}
+ 
   <div className="mt-8 text-center text-xs text-blue-100 border-t border-blue-500 pt-4">
     © 2025 Janta ko Aawaj. All rights reserved.
   </div>
