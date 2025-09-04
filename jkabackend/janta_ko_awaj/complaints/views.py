@@ -241,7 +241,7 @@ class ComplaintHistoryView(APIView):
 class ComplaintsSummaryAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self):
+    def get(self, request):
         total = Complaint.objects.count()
         statuses = [
             {"label": "Complaint Registered", "count": total},
