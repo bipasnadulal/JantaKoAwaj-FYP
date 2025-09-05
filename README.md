@@ -22,3 +22,26 @@ It’s a platform where people can raise issues, others can vote to support them
 - **Tools:** GitHub · Postman · VS Code · Jupyter Notebook
 
 ## Screenshots
+### 1. Landing Page
+![Landing Page](https://i.imgur.com/FiTqA7U.png)
+
+### 2. Complaints Page
+![Complaints Page](https://i.imgur.com/iSHO7Nr.png)
+
+### 3. Complaint Submission Page
+![Complaint Submission Page](https://i.imgur.com/b2eojyr.png)
+
+### 4. User Dashboard
+![User Dashboard](https://i.imgur.com/l6VjBYD.png)
+
+### 5. User Notifications
+![User Notifications Panel](https://i.imgur.com/2NVCA5e.png)
+
+### 6. Authority Dashboard
+![Authority Dashboard](https://i.imgur.com/lJCzOnY.png)
+
+### 7. Complaints Assigned to Authority
+![Complaints Assigned to Authority](https://i.imgur.com/rmC0EYz.png)
+
+### 8. Authority Notifications
+![Authority Notifications](https://i.imgur.com/AO8ADLh.png)
