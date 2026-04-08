@@ -23,7 +23,11 @@ export default function Navbar() {
       if (!token)
         return;
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/notifications/", {
+        // const res = await fetch("http://127.0.0.1:8000/api/notifications/", {
+        //   headers: { Authorization: `Token ${token}` },
+        // });
+
+        const res = await fetch("http://backend:8000/api/notifications/", {
           headers: { Authorization: `Token ${token}` },
         });
 
@@ -151,7 +155,7 @@ export default function Navbar() {
             )}
           </div> */}
 
-          {/* Hamburger Menu Button for small screen size */}
+
           <button
             className="md:hidden flex items-center text-white focus:outline-none ml-2"
             onClick={() => setMobileNavOpen(!mobileNavOpen)}
@@ -163,7 +167,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Nav */}
+
         {mobileNavOpen && (
           <div className="absolute top-16 left-0 w-full bg-blue-500 z-20 flex flex-col items-center md:hidden shadow-lg animate-fade-in">
             <Link

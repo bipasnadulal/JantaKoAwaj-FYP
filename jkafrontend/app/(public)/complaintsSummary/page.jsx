@@ -11,7 +11,10 @@ export default function ComplaintsSummary() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/complaints/summary/"); 
+        // const res = await axios.get("http://127.0.0.1:8000/api/complaints/summary/"); 
+        // setStats(res.data);
+
+        const res = await axios.get("http://backend:8000/api/complaints/summary/"); 
         setStats(res.data);
       } catch (err) {
         console.error("Error fetching complaint summary:", err);

@@ -19,7 +19,13 @@ export default function AuthorityLoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/authorities/login/", {
+      // const res = await fetch("http://127.0.0.1:8000/api/authorities/login/", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ email, password }),
+      // });
+
+      const res = await fetch("http://backend:8000/api/authorities/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -28,11 +34,11 @@ export default function AuthorityLoginPage() {
       const data = await res.json();
       // console.log("Saved access token:", data.access);
       if (res.ok) {
-        
+
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
 
-        
+
         localStorage.setItem("authority", JSON.stringify(data.authority));
 
         router.push("/dashboard/authorityDashboard");

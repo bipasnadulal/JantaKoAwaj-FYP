@@ -29,7 +29,11 @@ export default function AuthorityDashboard() {
 
     const fetchAuthority = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/authorities/detail/", {
+        // const res = await fetch("http://127.0.0.1:8000/api/authorities/detail/", {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // });
+
+        const res = await fetch("http://backend:8000/api/authorities/detail/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

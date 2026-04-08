@@ -88,7 +88,16 @@ export default function SubmitComplaintForm() {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/api/complaints/create/", {
+      // const res = await fetch("http://localhost:8000/api/complaints/create/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Token ${token}`,
+      //   },
+      //   body: JSON.stringify(form),
+      // });
+
+      const res = await fetch("http://backend:8000/api/complaints/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

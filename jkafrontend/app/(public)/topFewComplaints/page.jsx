@@ -10,7 +10,8 @@ export default function TopFewComplaints() {
   useEffect(() => {
     const fetchTopComplaints = async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:8000/api/complaints/top/');
+        // const res = await axios.get('http://127.0.0.1:8000/api/complaints/top/');
+        const res = await axios.get('http://backend:8000/api/complaints/top/');
         setComplaints(res.data);
       } catch (err) {
         console.error("Error fetching top complaints:", err);
@@ -38,7 +39,7 @@ export default function TopFewComplaints() {
         <div className="relative max-w-2xl mx-auto">
           <ComplaintCard complaint={currentComplaint} onVote={handleVote} />
 
-          {/* Carousel Navigation */}
+
           <div className="absolute top-1/2 -translate-y-1/2 left-[-2rem]">
             <button onClick={prev} className="text-blue-600 hover:text-blue-800 text-3xl">‹</button>
           </div>

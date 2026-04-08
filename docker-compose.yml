@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./jkabackend
+    container_name: jka-backend
+    ports:
+      - "8000:8000"
+    # REMOVED the volume mount that was overwriting /app
+    volumes:
+      - sqlite_data:/app/janta_ko_awaj  # persist SQLite DB
+      - static_files:/app/janta_ko_awaj/staticfiles
+    environment:
+      SECRET_KEY: "super-secret-key"
+      DEBUG: "False"
+      ALLOWED_HOSTS: "*"
+      EMAIL_HOST_USER: "jantakoawaj10@gmail.com"
+      EMAIL_HOST_PASSWORD: "your-app-password"
+
+  frontend:
+    build:
+      context: ./jkafrontend
+      args:
+        # Passed at BUILD time so Next.js can bake it in
+        NEXT_PUBLIC_API_URL: "http://localhost:8000"
+    container_name: jka-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  sqlite_data:
+  static_files:

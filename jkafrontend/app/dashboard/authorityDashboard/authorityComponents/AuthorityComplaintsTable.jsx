@@ -10,7 +10,13 @@ export default function AuthorityComplaintsTable() {
     const fetchComplaints = async () => {
       try {
         const token = localStorage.getItem("access");
-        const res = await fetch("http://127.0.0.1:8000/api/complaints/assigned/", {
+        // const res = await fetch("http://127.0.0.1:8000/api/complaints/assigned/", {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // });
+
+        const res = await fetch("http://backend:8000/api/complaints/assigned/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

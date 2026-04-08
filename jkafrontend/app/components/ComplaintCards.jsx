@@ -32,8 +32,13 @@ export default function ComplaintCard({ complaint, onVote }) {
     setIsVoting(true);
 
     try {
+      // const response = await axios.post(
+      //   `http://127.0.0.1:8000/api/complaints/${complaintId}/vote/`,
+      //   { vote_type: voteType },
+      //   { headers: { Authorization: `Token ${token}`, 'Content-Type': 'application/json' } }
+      // );
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/complaints/${complaintId}/vote/`,
+        `http://backend:8000/api/complaints/${complaintId}/vote/`,
         { vote_type: voteType },
         { headers: { Authorization: `Token ${token}`, 'Content-Type': 'application/json' } }
       );
@@ -85,8 +90,12 @@ export default function ComplaintCard({ complaint, onVote }) {
     if (!showProgress && history.length === 0) {
       setLoadingHistory(true);
       try {
+        // const response = await axios.get(
+        //   `http://127.0.0.1:8000/api/complaints/${localComplaint.id}/history/`
+        // );
+
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/complaints/${localComplaint.id}/history/`
+          `http://backend:8000/api/complaints/${localComplaint.id}/history/`
         );
         setHistory(response.data || []);
       } catch (err) {

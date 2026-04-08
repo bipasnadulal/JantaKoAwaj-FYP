@@ -68,7 +68,22 @@ export default function RegisterPage() {
 
   if (!Object.keys(errs).length) {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/users/register/", {
+      // const res = await fetch("http://127.0.0.1:8000/api/users/register/", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     username: form.username,
+      //     phone: form.phone,
+      //     password: form.password,
+      //     confirmPassword: form.confirmPassword,
+      //     province: form.province,
+      //     district: form.district,
+      //     municipality: form.municipality,
+      //     ward: form.ward,
+      //   }),
+      // });
+
+      const res = await fetch("http://backend:8000/api/users/register/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

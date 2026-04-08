@@ -12,7 +12,11 @@ export default function ComplaintsPage() {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/complaints/list/', {
+        // const res = await fetch('http://127.0.0.1:8000/api/complaints/list/', {
+        //   headers: { 'Content-Type': 'application/json' },
+        // });
+
+        const res = await fetch('http://backend:8000/api/complaints/list/', {
           headers: { 'Content-Type': 'application/json' },
         });
 

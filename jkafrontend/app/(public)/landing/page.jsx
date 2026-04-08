@@ -27,7 +27,7 @@ export default function Landing() {
 
   return (
     <>
-      {/* Landing Page / Hero Section */}
+
       <section className="flex flex-col md:flex-row min-h-screen items-center justify-center px-6 py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-10 flex flex-col md:flex-row items-center justify-center w-full">
           <div className="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
@@ -57,13 +57,13 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Key Features Section */}
+
       <section className="w-full bg-white py-16 px-6">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-10">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Key Features</h2>
 
-            {/* First row: 3 features */}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               <div className="flex flex-col items-center bg-blue-50 p-8 rounded shadow-md">
                 <CampaignIcon className="mb-4" style={{ fontSize: '4rem', color: '#db2777' }} />
@@ -90,7 +90,7 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* features */}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
               <div className="flex flex-col items-center bg-blue-50 p-8 rounded shadow-md">
                 <VibrationIcon className="mb-4" style={{ fontSize: '4rem', color: '#3b3b3b' }} />

@@ -42,8 +42,17 @@ export default function ComplaintDetailDrawer({ complaint, onClose, onUpdated, o
 
       const token = localStorage.getItem('access');
 
+      // const res = await fetch(
+      //   `http://127.0.0.1:8000/api/complaints/${complaint.id}/update/`,
+      //   {
+      //     method: 'PATCH',
+      //     headers: { Authorization: `Bearer ${token}` },
+      //     body: formData,
+      //   }
+      // );
+
       const res = await fetch(
-        `http://127.0.0.1:8000/api/complaints/${complaint.id}/update/`,
+        `http://backend:8000/api/complaints/${complaint.id}/update/`,
         {
           method: 'PATCH',
           headers: { Authorization: `Bearer ${token}` },
